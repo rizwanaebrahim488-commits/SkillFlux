@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillFlux | Elite Exchange</title>
+    <style>
+        /* Professional Black Theme */
+        :root {
+            --bg: #050505;
+            --accent: #00d4ff;
+            --card: #111111;
+            --text: #ffffff;
+            --dim: #888888;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Nav Bar - Top Right Focus */
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid #222;
+            gap: 15px;
+        }
+
+        .brand {
+            position: absolute;
+            top: 22px;
+            right: 40px;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: 4px;
+        }
+
+        .nav-inputs {
+            display: flex;
+            gap: 10px;
+            margin-right: 220px; /* Offset to prevent hitting the brand name */
+        }
+
+        input {
+            background: #181818;
+            border: 1px solid #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent); }
+
+        button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-how { background: none; color: var(--dim); }
+        .btn-login { background: var(--accent); color: #000; }
+        .btn-reg { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        button:hover { opacity: 0.8; }
+
+        /* Center Hero with Scrolling Text */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 60px;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .scroll-box {
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .scroll-text {
+            animation: slideUp 12s infinite;
+        }
+
+        .scroll-item {
+            height: 40px;
+            font-size: 22px;
+            color: var(--dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes slideUp {
+            0%, 20% { transform: translateY(0); }
+            25%, 45% { transform: translateY(-40px); }
+            50%, 70% { transform: translateY(-80px); }
+            75%, 95% { transform: translateY(-120px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-inputs">
+            <button class="btn-how" onclick="alert('1 Hour = 1 Credit. Trade skills, not money!')">How it works</button>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn-login" id="loginBtn">Login</button>
+            <button class="btn-reg" id="regBtn">Register</button>
+        </div>
+        <div class="brand">SKILLFLUX</div>
+    </nav>
+
+    <main class="hero">
+        <h1>SkillFlux Protocol</h1>
+        <div class="scroll-box">
+            <div class="scroll-text">
+                <div class="scroll-item">Peer-to-Peer Credit Exchange</div>
+                <div class="scroll-item">New Users Get 2 Free Credits</div>
+                <div class="scroll-item">Master Any Skill in 1-Hour Blocks</div>
+                <div class="scroll-item">Knowledge is the Only Currency</div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Your specific Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyD3UlP_V8aDYmybmcIseDn-NkVIE2CNhT8",
+          authDomain: "skillflux-cf990.firebaseapp.com",
+          projectId: "skillflux-cf990",
+          storageBucket: "skillflux-cf990.firebasestorage.app",
+          messagingSenderId: "25137352875",
+          appId: "1:25137352875:web:f01bcbaa3eb64f99a527ee",
+          measurementId: "G-SV46RGWD2R"
+        };
+
+        // Initialize
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- REGISTRATION LOGIC ---
+        document.getElementById('regBtn').onclick = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            if(!email || !pass) return alert("Fill all fields");
+
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                // Create user document in Firestore with 2 credits
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    email: email,
+                    credits: 2,
+                    skills: [],
+                    joinedDate: new Date()
+                });
+                alert("Account Created! You received 2 starter credits.");
+            } catch (err) {
+                alert(err.message);
+            }
+        };
+
+        // --- LOGIN LOGIC ---
+        document.getElementById('loginBtn').onclick = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                alert("Login successful!");
+            } catch (err) {
+                alert(err.message);
+            }
+        };
+    </script>
+</body>
+</html>
