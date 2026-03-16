@@ -3,172 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Elite Exchange</title>
+    <title>SkillFlux | Elite P2P Exchange</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg: #050505;
+            --bg: #030303;
             --accent: #00d4ff;
-            --card: #121212;
-            --text: #ffffff;
-            --dim: #888888;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #f0f0f0;
+            --text-dim: #999;
         }
 
         body {
             margin: 0;
             background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
         }
 
-        /* Nav Bar - Heading on the Right */
+        /* Nav Bar - Left Brand/Auth | Right Links */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
-            background: rgba(0,0,0,0.8);
+            padding: 15px 50px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
-        .nav-links {
+        .nav-left {
             display: flex;
-            gap: 20px;
+            align-items: center;
+            gap: 30px;
         }
 
         .nav-brand {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 900;
             color: var(--accent);
-            letter-spacing: 5px;
+            letter-spacing: 3px;
+            text-decoration: none;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        button {
-            padding: 10px 22px;
-            border-radius: 5px;
+        .nav-link { color: var(--text-dim); text-decoration: none; transition: 0.3s; }
+        .nav-link:hover { color: var(--accent); }
+
+        /* Auth Buttons */
+        .btn-auth {
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: 600;
             transition: 0.3s;
-            border: none;
+            border: 1px solid var(--accent);
         }
 
-        .btn-login { background: var(--accent); color: #000; }
-        .btn-reg { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-login:hover { transform: scale(1.05); }
+        .login-trigger { background: var(--accent); color: #000; }
+        .reg-trigger { background: transparent; color: var(--accent); }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
-            height: 70vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 120px 50px;
             text-align: center;
+            background: radial-gradient(circle at center, #111 0%, #030303 100%);
         }
 
-        .hero h1 { font-size: 70px; margin-bottom: 10px; letter-spacing: -2px; }
+        .hero h1 { font-size: 80px; margin: 0; letter-spacing: -3px; }
+        .hero p { color: var(--accent); font-weight: 300; font-size: 20px; letter-spacing: 4px; }
 
-        /* How it Works - Box Layout */
-        .section-title { text-align: center; color: var(--accent); letter-spacing: 2px; margin-bottom: 40px; }
-        
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 50px;
-            max-width: 1200px;
+        /* Elite Exchange Boxes */
+        .section-container {
+            max-width: 1100px;
             margin: 0 auto;
+            padding: 100px 20px;
         }
 
-        .feature-box {
-            background: var(--card);
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #222;
-            transition: 0.3s;
-            text-align: center;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
         }
 
-        .feature-box:hover {
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 1px; /* Sharp professional edges */
+            transition: 0.4s;
+        }
+
+        .card:hover {
             border-color: var(--accent);
-            transform: translateY(-5px);
+            background: rgba(0, 212, 255, 0.02);
         }
 
-        .feature-box h3 { color: var(--accent); margin-bottom: 15px; }
-        .feature-box p { color: var(--dim); line-height: 1.6; }
+        .card i { color: var(--accent); font-size: 30px; margin-bottom: 20px; }
+        .card h3 { font-size: 22px; margin-bottom: 15px; letter-spacing: 1px; }
+        .card p { color: var(--text-dim); font-size: 15px; }
 
-        /* Modal (Login Popup) */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             justify-content: center; align-items: center;
-            z-index: 1000;
+            z-index: 2000;
         }
 
         .modal-content {
-            background: #111;
-            padding: 40px;
-            border-radius: 10px;
+            background: #0a0a0a;
+            padding: 50px;
             border: 1px solid var(--accent);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 300px;
+            width: 350px;
+            text-align: center;
         }
 
         .modal-content input {
+            width: 100%;
             padding: 12px;
-            background: #222;
-            border: 1px solid #444;
+            margin-bottom: 15px;
+            background: #111;
+            border: 1px solid #333;
             color: white;
-            border-radius: 5px;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="nav-links">
-            <button class="btn-login" onclick="openModal()">Login</button>
-            <button class="btn-reg" onclick="openModal()">Register</button>
+        <div class="nav-left">
+            <a href="#" class="nav-brand">SKILLFLUX</a>
+            <button class="btn-auth login-trigger" onclick="openModal()">LOGIN</button>
+            <button class="btn-auth reg-trigger" onclick="openModal()">REGISTER</button>
         </div>
-        <div class="nav-brand">SKILLFLUX</div>
+        
+        <div class="nav-right">
+            <a href="#how" class="nav-link">Protocol</a>
+            <a href="#about" class="nav-link">Elite Exchange</a>
+            <a href="#contact" class="nav-link">Support</a>
+        </div>
     </nav>
 
     <main class="hero">
-        <h1>SkillFlux Protocol</h1>
-        <p style="color: var(--dim); font-size: 20px;">Peer-to-Peer Knowledge Exchange</p>
+        <p>REDEFINING KNOWLEDGE VALUE</p>
+        <h1>SkillFlux Elite</h1>
     </main>
 
-    <h2 class="section-title">HOW IT WORKS</h2>
-    <div class="container">
-        <div class="feature-box">
-            <h3>1. Join the Network</h3>
-            <p>Register today and instantly receive <strong>2 Welcome Credits</strong>. No credit cards, no money.</p>
+    <div class="section-container" id="how">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h2 style="font-size: 32px; letter-spacing: 2px;">THE P2P EXCHANGE SYSTEM</h2>
+            <div style="width: 50px; height: 2px; background: var(--accent); margin: 20px auto;"></div>
         </div>
-        <div class="feature-box">
-            <h3>2. Exchange Skills</h3>
-            <p>1 Credit = 1 Hour. Use your credits to acquire skills, or teach to earn more.</p>
-        </div>
-        <div class="feature-box">
-            <h3>3. Continuous Learning</h3>
-            <p>Need more time? Book multi-session classes. Credits are released session-by-session.</p>
+
+        <div class="grid">
+            <div class="card">
+                <i class="fas fa-microchip"></i>
+                <h3>Credit Protocol</h3>
+                <p>SkillFlux operates on a strict credit-based economy. New accounts are authorized with 2 starting credits to engage the network immediately.</p>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-clock"></i>
+                <h3>Time Value</h3>
+                <p>One hour of expert knowledge equals exactly one credit. This ensures a fair, decentralized exchange of human time without financial barriers.</p>
+            </div>
+
+            <div class="card">
+                <i class="fas fa-network-wired"></i>
+                <h3>Elite Multi-Class</h3>
+                <p>Sessions requiring deeper mastery can be scheduled as a series. Credits are held in escrow and released only as milestones are completed.</p>
+            </div>
         </div>
     </div>
 
     <div class="modal" id="authModal">
         <div class="modal-content">
-            <h2 style="margin-top:0; color:var(--accent)">Access Protocol</h2>
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Password">
-            <button class="btn-login" id="loginBtn">Sign In</button>
-            <button class="btn-reg" id="regBtn">Create Account</button>
-            <button class="btn-how" onclick="closeModal()" style="color:red">Cancel</button>
+            <h2 style="letter-spacing: 3px; color: var(--accent);">SECURITY ACCESS</h2>
+            <p style="color: #666; font-size: 12px; margin-bottom: 30px;">Enter your credentials to enter the exchange</p>
+            <input type="email" id="email" placeholder="IDENTITY (EMAIL)">
+            <input type="password" id="password" placeholder="ACCESS KEY (PASSWORD)">
+            <button class="btn-auth login-trigger" id="loginBtn" style="width: 100%; margin-bottom: 10px;">SIGN IN</button>
+            <button class="btn-auth reg-trigger" id="regBtn" style="width: 100%;">AUTHORIZE NEW ACCOUNT</button>
+            <p onclick="closeModal()" style="color: red; cursor: pointer; margin-top: 20px; font-size: 12px;">CLOSE</p>
         </div>
     </div>
 
@@ -178,30 +212,28 @@
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyD3UlP_V8aDYmybmcIseDn-NkVIE2CNhT8",
-          authDomain: "skillflux-cf990.firebaseapp.com",
-          projectId: "skillflux-cf990",
-          storageBucket: "skillflux-cf990.firebasestorage.app",
-          messagingSenderId: "25137352875",
-          appId: "1:25137352875:web:f01bcbaa3eb64f99a527ee"
+            apiKey: "AIzaSyD3UlP_V8aDYmybmcIseDn-NkVIE2CNhT8",
+            authDomain: "skillflux-cf990.firebaseapp.com",
+            projectId: "skillflux-cf990",
+            storageBucket: "skillflux-cf990.firebasestorage.app",
+            messagingSenderId: "25137352875",
+            appId: "1:25137352875:web:f01bcbaa3eb64f99a527ee"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Modal Controls
         window.openModal = () => document.getElementById('authModal').style.display = 'flex';
         window.closeModal = () => document.getElementById('authModal').style.display = 'none';
 
-        // Firebase Logic (Same as before but linked to Modal)
         document.getElementById('regBtn').onclick = async () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
             try {
                 const cred = await createUserWithEmailAndPassword(auth, email, pass);
-                await setDoc(doc(db, "users", cred.user.uid), { email, credits: 2, joinedDate: new Date() });
-                alert("Account Created! 2 Credits awarded.");
+                await setDoc(doc(db, "users", cred.user.uid), { email, credits: 2, created: new Date() });
+                alert("Authorization Successful. 2 Credits Awarded.");
                 closeModal();
             } catch (err) { alert(err.message); }
         };
@@ -211,7 +243,7 @@
             const pass = document.getElementById('password').value;
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
-                alert("Logged in!");
+                alert("Access Granted.");
                 closeModal();
             } catch (err) { alert(err.message); }
         };
