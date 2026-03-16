@@ -3,55 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Elite Command</title>
+    <title>SkillFlux | Escrow Protocol</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --bg: #050505;
-            --accent: #00d4ff;
-            --card: #111;
-            --border: #222;
-            --text: #fff;
-            --danger: #ff4d4d;
-        }
-
+        :root { --bg: #050505; --accent: #00d4ff; --card: #111; --border: #222; --text: #fff; --danger: #ff4d4d; --pending: #ffaa00; }
         body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
-        
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 40px; background: #000; border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        .nav-left { display: flex; gap: 25px; align-items: center; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: #000; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .nav-left { display: flex; gap: 20px; align-items: center; }
         .nav-brand { font-weight: 900; color: var(--accent); letter-spacing: 2px; }
-        .nav-link { color: #888; text-decoration: none; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.3s; }
+        .nav-link { color: #888; text-decoration: none; cursor: pointer; font-size: 13px; font-weight: 600; }
         .nav-link:hover { color: var(--accent); }
-
         .user-stats { background: rgba(0, 212, 255, 0.1); padding: 5px 15px; border-radius: 4px; border: 1px solid var(--accent); color: var(--accent); }
-
         .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
         .hidden { display: none; }
-
-        /* Card Styles */
-        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 4px; }
-        .card h3 { color: var(--accent); margin-top: 0; }
-        
-        /* Inputs */
-        input, textarea { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 12px; margin-bottom: 15px; border-radius: 4px; box-sizing: border-box; }
-
-        /* Buttons */
-        .btn { padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; border-radius: 2px; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 4px; margin-bottom: 15px; }
+        .btn { padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; border-radius: 2px; transition: 0.3s; }
         .btn-primary { background: var(--accent); color: #000; }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
-        .btn-danger:hover { background: var(--danger); color: #fff; }
-
-        /* History Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        th { color: var(--accent); }
+        .status-badge { font-size: 10px; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; }
+        input, textarea { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 12px; margin-bottom: 10px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -60,7 +32,8 @@
         <div class="nav-left">
             <div class="nav-brand">SKILLFLUX</div>
             <a class="nav-link" onclick="showSection('feed')">GLOBAL FEED</a>
-            <a class="nav-link" onclick="showSection('my-skills')">MY POSTS</a>
+            <a class="nav-link" onclick="showSection('requests')">REQUESTS</a>
+            <a class="nav-link" onclick="showSection('my-posts')">MY POSTS</a>
             <a class="nav-link" onclick="showSection('history')">HISTORY</a>
         </div>
         <div style="display: flex; gap: 20px; align-items: center;">
@@ -72,34 +45,29 @@
     <div class="container">
         
         <section id="feedSection">
-            <h2 style="letter-spacing: 1px;">AVAILABLE PROTOCOLS</h2>
-            <div class="skill-grid" id="globalFeed"></div>
+            <h2>AVAILABLE PROTOCOLS</h2>
+            <div id="globalFeed"></div>
         </section>
 
-        <section id="mySkillsSection" class="hidden">
-            <div style="background: #0a0a0a; padding: 30px; border: 1px solid var(--accent); margin-bottom: 40px;">
-                <h3 id="formTitle">POST NEW SKILL</h3>
-                <input type="hidden" id="editId">
+        <section id="requestsSection" class="hidden">
+            <h2>INCOMING CLASS REQUESTS</h2>
+            <div id="incomingList"></div>
+        </section>
+
+        <section id="myPostsSection" class="hidden">
+            <div class="card" style="border-color: var(--accent)">
+                <h3>POST NEW SKILL</h3>
                 <input type="text" id="skillTitle" placeholder="Skill Title">
-                <textarea id="skillDesc" rows="3" placeholder="Description of your session..."></textarea>
-                <button class="btn btn-primary" id="saveBtn">PUBLISH TO NETWORK</button>
-                <button class="btn btn-outline hidden" id="cancelEdit" onclick="resetForm()">CANCEL EDIT</button>
+                <textarea id="skillDesc" rows="2" placeholder="Description"></textarea>
+                <button class="btn btn-primary" id="saveBtn">PUBLISH</button>
             </div>
-            <h2>YOUR POSTED SKILLS</h2>
-            <div class="skill-grid" id="mySkillsFeed"></div>
+            <div id="mySkillsFeed"></div>
         </section>
 
         <section id="historySection" class="hidden">
-            <h2>CREDIT LOGS</h2>
-            <table id="historyTable">
-                <thead>
-                    <tr>
-                        <th>TYPE</th>
-                        <th>PARTNER</th>
-                        <th>CREDITS</th>
-                        <th>DATE</th>
-                    </tr>
-                </thead>
+            <h2>TRANSACTION LOGS (ESCROW)</h2>
+            <table>
+                <thead><tr><th>TYPE</th><th>PARTNER</th><th>STATUS</th><th>ACTION</th></tr></thead>
                 <tbody id="historyBody"></tbody>
             </table>
         </section>
@@ -109,7 +77,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, updateDoc, deleteDoc, increment, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, updateDoc, deleteDoc, increment, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD3UlP_V8aDYmybmcIseDn-NkVIE2CNhT8",
@@ -123,53 +91,32 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
         let user = null;
 
         window.showSection = (name) => {
-            document.getElementById('feedSection').classList.toggle('hidden', name !== 'feed');
-            document.getElementById('mySkillsSection').classList.toggle('hidden', name !== 'my-skills');
-            document.getElementById('historySection').classList.toggle('hidden', name !== 'history');
+            ['feed', 'requests', 'my-posts', 'history'].forEach(s => document.getElementById(s+'Section').classList.add('hidden'));
+            document.getElementById(name+'Section').classList.remove('hidden');
         };
 
         onAuthStateChanged(auth, u => { if(u) { user = u; init(); } else { window.location.href="index.html"; } });
 
         function init() {
-            loadCredits();
+            onSnapshot(doc(db, "users", user.uid), s => { document.getElementById('creditBalance').innerText = s.data().credits; });
             loadGlobalFeed();
             loadMySkills();
+            loadIncomingRequests();
             loadHistory();
         }
 
-        async function loadCredits() {
-            onSnapshot(doc(db, "users", user.uid), s => {
-                document.getElementById('creditBalance').innerText = s.data().credits;
-            });
-        }
-
-        // --- POST & EDIT LOGIC ---
+        // 1. Post Skill
         document.getElementById('saveBtn').onclick = async () => {
             const title = document.getElementById('skillTitle').value;
             const desc = document.getElementById('skillDesc').value;
-            const editId = document.getElementById('editId').value;
-
-            if(editId) {
-                await updateDoc(doc(db, "skills", editId), { title, desc });
-                resetForm();
-            } else {
-                await addDoc(collection(db, "skills"), { title, desc, uid: user.uid, email: user.email, created: new Date() });
-            }
-            document.getElementById('skillTitle').value = '';
-            document.getElementById('skillDesc').value = '';
+            await addDoc(collection(db, "skills"), { title, desc, uid: user.uid, email: user.email });
+            alert("Skill Live.");
         };
 
-        window.resetForm = () => {
-            document.getElementById('editId').value = '';
-            document.getElementById('formTitle').innerText = "POST NEW SKILL";
-            document.getElementById('cancelEdit').classList.add('hidden');
-        };
-
-        // --- FEED LOGIC ---
+        // 2. Load Global Feed (Hide own)
         function loadGlobalFeed() {
             onSnapshot(collection(db, "skills"), s => {
                 const feed = document.getElementById('globalFeed');
@@ -177,16 +124,77 @@
                 s.forEach(d => {
                     const data = d.data();
                     if(data.uid === user.uid) return;
-                    feed.innerHTML += `
-                        <div class="card">
-                            <h3>${data.title}</h3>
-                            <p style="color: #666; font-size: 12px;">Expert: ${data.email}</p>
-                            <p>${data.desc}</p>
-                            <button class="btn btn-outline" onclick="acquire('${d.id}', '${data.uid}')">SEND ACQUIRE REQUEST</button>
-                        </div>`;
+                    feed.innerHTML += `<div class="card"><h3>${data.title}</h3><p>${data.desc}</p>
+                    <button class="btn btn-outline" onclick="requestSkill('${d.id}', '${data.uid}', '${data.title}')">REQUEST ACCESS</button></div>`;
                 });
             });
         }
+
+        // 3. Request Skill (Creates PENDING transaction)
+        window.requestSkill = async (skillId, teacherId, title) => {
+            await addDoc(collection(db, "transactions"), {
+                skillId, title, teacherId, learnerId: user.uid, learnerEmail: user.email, 
+                status: 'pending', link: '', time: '', created: serverTimestamp()
+            });
+            alert("Request Sent! Waiting for teacher to set time/link.");
+        };
+
+        // 4. Incoming Requests (For Teacher to provide link)
+        function loadIncomingRequests() {
+            const q = query(collection(db, "transactions"), where("teacherId", "==", user.uid), where("status", "==", "pending"));
+            onSnapshot(q, s => {
+                const list = document.getElementById('incomingList');
+                list.innerHTML = '';
+                s.forEach(d => {
+                    const t = d.data();
+                    list.innerHTML += `<div class="card"><h4>Request for: ${t.title}</h4>
+                    <input type="text" id="link-${d.id}" placeholder="Meeting Link (GMeet/Zoom)">
+                    <input type="text" id="time-${d.id}" placeholder="Time (e.g. 8:00 PM)">
+                    <button class="btn btn-primary" onclick="approveRequest('${d.id}')">SEND LINK</button></div>`;
+                });
+            });
+        }
+
+        window.approveRequest = async (id) => {
+            const link = document.getElementById(`link-${id}`).value;
+            const time = document.getElementById(`time-${id}`).value;
+            await updateDoc(doc(db, "transactions", id), { link, time, status: 'approved' });
+            alert("Link sent to learner!");
+        };
+
+        // 5. History & Escrow Release (For Learner to pay)
+        function loadHistory() {
+            onSnapshot(collection(db, "transactions"), s => {
+                const body = document.getElementById('historyBody');
+                body.innerHTML = '';
+                s.forEach(d => {
+                    const t = d.data();
+                    if(t.learnerId !== user.uid && t.teacherId !== user.uid) return;
+                    
+                    let actionBtn = '';
+                    if(t.status === 'approved' && t.learnerId === user.uid) {
+                        actionBtn = `<button class="btn btn-primary" onclick="releaseCredits('${d.id}', '${t.teacherId}')">CLASS DONE - PAY 1 CREDIT</button>`;
+                    }
+
+                    body.innerHTML += `<tr>
+                        <td>${t.title}</td>
+                        <td>${t.teacherId === user.uid ? t.learnerEmail : 'Teacher'}</td>
+                        <td style="color:${t.status === 'completed' ? 'var(--accent)' : 'var(--pending)'}">${t.status}</td>
+                        <td>${t.link ? `Link: ${t.link} <br> ${actionBtn}` : 'Waiting...'}</td>
+                    </tr>`;
+                });
+            });
+        }
+
+        window.releaseCredits = async (transId, teacherId) => {
+            const userSnap = await getDoc(doc(db, "users", user.uid));
+            if(userSnap.data().credits < 1) return alert("Insufficient Credits!");
+
+            await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
+            await updateDoc(doc(db, "users", teacherId), { credits: increment(1) });
+            await updateDoc(doc(db, "transactions", transId), { status: 'completed' });
+            alert("Payment Released! Transaction Completed.");
+        };
 
         function loadMySkills() {
             const q = query(collection(db, "skills"), where("uid", "==", user.uid));
@@ -194,65 +202,12 @@
                 const feed = document.getElementById('mySkillsFeed');
                 feed.innerHTML = '';
                 s.forEach(d => {
-                    const data = d.data();
-                    feed.innerHTML += `
-                        <div class="card">
-                            <h3>${data.title}</h3>
-                            <p>${data.desc}</p>
-                            <div style="display:flex; gap:10px;">
-                                <button class="btn btn-outline" onclick="editSkill('${d.id}', '${data.title}', '${data.desc}')">EDIT</button>
-                                <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">DELETE</button>
-                            </div>
-                        </div>`;
+                    feed.innerHTML += `<div class="card"><h3>${d.data().title}</h3>
+                    <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">DELETE</button></div>`;
                 });
             });
         }
-
-        window.editSkill = (id, t, d) => {
-            document.getElementById('editId').value = id;
-            document.getElementById('skillTitle').value = t;
-            document.getElementById('skillDesc').value = d;
-            document.getElementById('formTitle').innerText = "EDITING SKILL";
-            document.getElementById('cancelEdit').classList.remove('hidden');
-            window.scrollTo(0,0);
-        };
-
-        window.deleteSkill = async (id) => {
-            if(confirm("Confirm deletion of this protocol?")) await deleteDoc(doc(db, "skills", id));
-        };
-
-        // --- ACQUIRE & HISTORY ---
-        window.acquire = async (id, teacherId) => {
-            const snap = await getDoc(doc(db, "users", user.uid));
-            if(snap.data().credits < 1) return alert("Insufficient Credits.");
-
-            await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
-            await updateDoc(doc(db, "users", teacherId), { credits: increment(1) });
-            
-            await addDoc(collection(db, "history"), {
-                buyerId: user.uid, sellerId: teacherId, buyerEmail: user.email, date: new Date()
-            });
-            alert("Request Sent! 1 Credit reserved.");
-        };
-
-        function loadHistory() {
-            onSnapshot(collection(db, "history"), s => {
-                const body = document.getElementById('historyBody');
-                body.innerHTML = '';
-                s.forEach(d => {
-                    const h = d.data();
-                    if(h.buyerId !== user.uid && h.sellerId !== user.uid) return;
-                    const type = h.buyerId === user.uid ? "ACQUIRED" : "TAUGHT";
-                    const color = type === "ACQUIRED" ? "red" : "var(--accent)";
-                    body.innerHTML += `<tr>
-                        <td style="color:${color}">${type}</td>
-                        <td>${h.buyerEmail}</td>
-                        <td>1</td>
-                        <td>${h.date.toDate().toLocaleDateString()}</td>
-                    </tr>`;
-                });
-            });
-        }
+        window.deleteSkill = async (id) => { if(confirm("Delete?")) await deleteDoc(doc(db, "skills", id)); };
     </script>
 </body>
 </html>
