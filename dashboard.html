@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Elite Management</title>
+    <title>SkillFlux | Elite Command Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
             --bg: #030303; --accent: #00d4ff; --card: #0a0a0a; --border: #1a1a1a; 
             --text: #f0f0f0; --danger: #ff4444; --pending: #ffbb00; --success: #00ff88;
         }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
         /* Navigation */
         nav { 
@@ -19,81 +19,88 @@
             position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
         }
         .nav-left { display: flex; gap: 20px; align-items: center; }
-        .nav-brand { font-weight: 900; color: var(--accent); letter-spacing: 3px; font-size: 20px; }
-        .nav-link { color: #666; text-decoration: none; cursor: pointer; font-size: 12px; font-weight: 700; letter-spacing: 1px; transition: 0.3s; }
+        .nav-brand { font-weight: 900; color: var(--accent); letter-spacing: 3px; font-size: 20px; text-decoration: none; }
+        .nav-link { color: #666; text-decoration: none; cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 1px; transition: 0.3s; text-transform: uppercase; }
         .nav-link:hover, .nav-link.active { color: var(--accent); }
-        
-        .user-stats { background: rgba(0, 212, 255, 0.05); padding: 8px 18px; border: 1px solid var(--accent); color: var(--accent); font-weight: 800; font-size: 14px; }
+        .user-stats { background: rgba(0, 212, 255, 0.05); padding: 8px 18px; border: 1px solid var(--accent); color: var(--accent); font-weight: 800; border-radius: 4px; }
 
         /* Layout */
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
         .hidden { display: none; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 4px; margin-bottom: 20px; transition: 0.3s; }
-        .card:hover { border-color: #333; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 4px; margin-bottom: 20px; }
         
-        /* Typography */
-        h2 { font-size: 14px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; border-left: 3px solid var(--accent); padding-left: 15px; }
+        h2 { font-size: 12px; color: #555; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; border-left: 3px solid var(--accent); padding-left: 15px; }
         
-        /* Buttons & Inputs */
-        .btn { padding: 10px 20px; border: none; cursor: pointer; font-weight: 700; border-radius: 2px; font-size: 12px; transition: 0.3s; text-transform: uppercase; }
+        /* Buttons & UI Elements */
+        .btn { padding: 10px 20px; border: none; cursor: pointer; font-weight: 700; border-radius: 2px; font-size: 11px; transition: 0.3s; text-transform: uppercase; }
         .btn-primary { background: var(--accent); color: #000; }
         .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
         .btn-danger { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
         
-        input, textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 12px; margin-bottom: 10px; border-radius: 2px; }
+        input, textarea { width: 100%; background: #000; border: 1px solid #222; color: #fff; padding: 12px; margin-bottom: 10px; border-radius: 2px; box-sizing: border-box; font-family: 'Courier New', monospace; }
         input:focus { border-color: var(--accent); outline: none; }
 
-        /* History Table */
-        table { width: 100%; border-collapse: collapse; background: var(--card); }
-        th { text-align: left; padding: 15px; color: #444; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        .status-pending { color: var(--pending); font-weight: bold; }
-        .status-completed { color: var(--success); }
+        /* Table */
+        table { width: 100%; border-collapse: collapse; background: var(--card); margin-top: 10px; }
+        th { text-align: left; padding: 15px; color: #444; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 13px; }
+        
+        .status-badge { font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: 900; }
+        .bg-pending { background: rgba(255, 187, 0, 0.1); color: var(--pending); }
+        .bg-approved { background: rgba(0, 212, 255, 0.1); color: var(--accent); }
+        .bg-completed { background: rgba(0, 255, 136, 0.1); color: var(--success); }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-left">
-            <div class="nav-brand">SKILLFLUX</div>
-            <a class="nav-link" id="link-feed" onclick="showSection('feed')">GLOBAL FEED</a>
-            <a class="nav-link" id="link-my-posts" onclick="showSection('my-posts')">MY POSTS</a>
-            <a class="nav-link" id="link-requests" onclick="showSection('requests')">REQUESTS</a>
-            <a class="nav-link" id="link-history" onclick="showSection('history')">HISTORY</a>
+            <a href="#" class="nav-brand">SKILLFLUX</a>
+            <a class="nav-link active" id="link-feed" onclick="showSection('feed')">Global Feed</a>
+            <a class="nav-link" id="link-my-posts" onclick="showSection('my-posts')">My Posts</a>
+            <a class="nav-link" id="link-requests" onclick="showSection('requests')">Requests</a>
+            <a class="nav-link" id="link-history" onclick="showSection('history')">History</a>
         </div>
         <div style="display: flex; gap: 20px; align-items: center;">
             <div class="user-stats"><i class="fas fa-bolt"></i> <span id="creditBalance">0</span> CR</div>
-            <a href="index.html" class="nav-link" style="color: var(--danger);">LOGOUT</a>
+            <a href="index.html" class="nav-link" style="color: var(--danger);">Logout</a>
         </div>
     </nav>
 
     <div class="container">
         
         <section id="feedSection">
-            <h2>NETWORK SKILL PROTOCOLS</h2>
+            <h2>Available Protocols (Others)</h2>
             <div id="globalFeed"></div>
         </section>
 
         <section id="my-postsSection" class="hidden">
-            <h2>PUBLISH NEW EXPERTISE</h2>
+            <h2>Initialize New Skill Post</h2>
             <div class="card" style="border-style: dashed; border-color: #333;">
-                <input type="text" id="skillTitle" placeholder="Skill Name (e.g. React Native Architecture)">
-                <textarea id="skillDesc" rows="3" placeholder="What will you teach in 1 hour?"></textarea>
-                <button class="btn btn-primary" id="saveBtn">INITIALIZE POST</button>
+                <input type="text" id="skillTitle" placeholder="Skill Title (e.g. Advanced C Programming)">
+                <textarea id="skillDesc" rows="3" placeholder="Define the session parameters..."></textarea>
+                <button class="btn btn-primary" id="saveBtn">Publish to Network</button>
             </div>
-            <h2>YOUR ACTIVE LISTINGS</h2>
+            <h2>Your Active Listings</h2>
             <div id="mySkillsFeed"></div>
         </section>
 
         <section id="requestsSection" class="hidden">
-            <h2>INCOMING ACCESS REQUESTS</h2>
+            <h2>Incoming Access Notifications</h2>
             <div id="incomingList"></div>
         </section>
 
         <section id="historySection" class="hidden">
-            <h2>TRANSACTION ARCHIVE</h2>
+            <h2>Credit Transaction Logs</h2>
             <table>
-                <thead><tr><th>PROTOCOL</th><th>PARTNER</th><th>STATUS</th><th>DATA / ACTION</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Protocol</th>
+                        <th>Partner Node</th>
+                        <th>Credit Flow</th>
+                        <th>Status / Action</th>
+                    </tr>
+                </thead>
                 <tbody id="historyBody"></tbody>
             </table>
         </section>
@@ -105,6 +112,7 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, updateDoc, deleteDoc, increment, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD3UlP_V8aDYmybmcIseDn-NkVIE2CNhT8",
             authDomain: "skillflux-cf990.firebaseapp.com",
@@ -131,25 +139,44 @@
         onAuthStateChanged(auth, u => { if(u) { user = u; init(); } else { window.location.href="index.html"; } });
 
         function init() {
-            onSnapshot(doc(db, "users", user.uid), s => { document.getElementById('creditBalance').innerText = s.data().credits; });
+            onSnapshot(doc(db, "users", user.uid), s => { 
+                if(s.exists()) document.getElementById('creditBalance').innerText = s.data().credits; 
+            });
             loadGlobalFeed();
             loadMySkills();
             loadIncomingRequests();
             loadHistory();
         }
 
-        // POST SKILL
+        // --- MY POSTS LOGIC ---
         document.getElementById('saveBtn').onclick = async () => {
             const title = document.getElementById('skillTitle').value;
             const desc = document.getElementById('skillDesc').value;
-            if(!title) return;
+            if(!title) return alert("Title is required.");
             await addDoc(collection(db, "skills"), { title, desc, uid: user.uid, email: user.email });
             document.getElementById('skillTitle').value = '';
             document.getElementById('skillDesc').value = '';
             alert("Protocol Uploaded.");
         };
 
-        // GLOBAL FEED
+        function loadMySkills() {
+            const q = query(collection(db, "skills"), where("uid", "==", user.uid));
+            onSnapshot(q, s => {
+                const feed = document.getElementById('mySkillsFeed');
+                feed.innerHTML = s.empty ? '<p style="color:#333">No active posts.</p>' : '';
+                s.forEach(d => {
+                    feed.innerHTML += `<div class="card">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h3>${d.data().title}</h3>
+                            <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">Delete</button>
+                        </div>
+                    </div>`;
+                });
+            });
+        }
+        window.deleteSkill = async (id) => { if(confirm("Confirm deletion?")) await deleteDoc(doc(doc(db, "skills", id))); };
+
+        // --- GLOBAL FEED LOGIC ---
         function loadGlobalFeed() {
             onSnapshot(collection(db, "skills"), s => {
                 const feed = document.getElementById('globalFeed');
@@ -157,8 +184,11 @@
                 s.forEach(d => {
                     const data = d.data();
                     if(data.uid === user.uid) return;
-                    feed.innerHTML += `<div class="card"><h3>${data.title}</h3><p style="color:#666">${data.desc}</p>
-                    <button class="btn btn-outline" onclick="requestSkill('${d.id}', '${data.uid}', '${data.title}')">REQUEST ACCESS</button></div>`;
+                    feed.innerHTML += `<div class="card">
+                        <h3>${data.title}</h3>
+                        <p style="color:#888; font-size:13px;">${data.desc}</p>
+                        <button class="btn btn-outline" onclick="requestSkill('${d.id}', '${data.uid}', '${data.title}')">Acquire Request</button>
+                    </div>`;
                 });
             });
         }
@@ -168,33 +198,37 @@
                 skillId, title, teacherId, learnerId: user.uid, learnerEmail: user.email, 
                 status: 'pending', link: '', time: '', created: serverTimestamp()
             });
-            alert("Request Sent to Teacher.");
+            alert("Request sent. View status in History.");
         };
 
-        // REQUESTS (FOR ME)
+        // --- REQUESTS (NOTIFICATIONS) ---
         function loadIncomingRequests() {
             const q = query(collection(db, "transactions"), where("teacherId", "==", user.uid), where("status", "==", "pending"));
             onSnapshot(q, s => {
                 const list = document.getElementById('incomingList');
-                list.innerHTML = s.empty ? '<p style="color:#333">No active requests.</p>' : '';
+                list.innerHTML = s.empty ? '<p style="color:#333">No new notifications.</p>' : '';
                 s.forEach(d => {
                     const t = d.data();
-                    list.innerHTML += `<div class="card"><h4>${t.learnerEmail} wants to learn ${t.title}</h4>
-                    <input type="text" id="link-${d.id}" placeholder="Meeting Link">
-                    <input type="text" id="time-${d.id}" placeholder="Scheduled Time">
-                    <button class="btn btn-primary" onclick="approveRequest('${d.id}')">APPROVE & SEND LINK</button></div>`;
+                    list.innerHTML += `<div class="card" style="border-left: 4px solid var(--pending)">
+                        <p style="color:var(--pending); font-size:10px;">INCOMING REQUEST</p>
+                        <h4>${t.learnerEmail} requested ${t.title}</h4>
+                        <input type="text" id="link-${d.id}" placeholder="Meeting Link">
+                        <input type="text" id="time-${d.id}" placeholder="Time/Date">
+                        <button class="btn btn-primary" onclick="acceptRequest('${d.id}')">Accept & Provide Link</button>
+                    </div>`;
                 });
             });
         }
 
-        window.approveRequest = async (id) => {
+        window.acceptRequest = async (id) => {
             const link = document.getElementById(`link-${id}`).value;
             const time = document.getElementById(`time-${id}`).value;
-            if(!link) return alert("Please provide a link.");
+            if(!link) return alert("Link is required.");
             await updateDoc(doc(db, "transactions", id), { link, time, status: 'approved' });
+            alert("Notification Sent.");
         };
 
-        // HISTORY (PENDING LOGS)
+        // --- HISTORY (CREDIT LEDGER) ---
         function loadHistory() {
             onSnapshot(collection(db, "transactions"), s => {
                 const body = document.getElementById('historyBody');
@@ -203,44 +237,35 @@
                     const t = d.data();
                     if(t.learnerId !== user.uid && t.teacherId !== user.uid) return;
                     
-                    let statusClass = t.status === 'completed' ? 'status-completed' : 'status-pending';
-                    let action = t.link ? `<b>Link:</b> ${t.link}<br><b>Time:</b> ${t.time}` : '<i>Awaiting Teacher</i>';
+                    let flow = t.teacherId === user.uid ? `<span style="color:var(--success)">+1.00</span>` : `<span style="color:var(--danger)">-1.00</span>`;
+                    let partner = t.teacherId === user.uid ? t.learnerEmail : "Teacher Node";
+                    let action = t.link ? `<div style="font-size:11px;"><b>Link:</b> ${t.link}<br><b>Time:</b> ${t.time}</div>` : "<i>Awaiting Data</i>";
                     
                     if(t.status === 'approved' && t.learnerId === user.uid) {
-                        action += `<br><button class="btn btn-primary" style="margin-top:10px" onclick="releaseCredits('${d.id}', '${t.teacherId}')">CONFIRM & PAY</button>`;
+                        action += `<button class="btn btn-primary" style="margin-top:8px; padding:5px 10px;" onclick="releasePayment('${d.id}', '${t.teacherId}')">Confirm & Pay</button>`;
                     }
 
                     body.innerHTML += `<tr>
                         <td>${t.title}</td>
-                        <td>${t.teacherId === user.uid ? t.learnerEmail : 'Teacher Node'}</td>
-                        <td class="${statusClass}">${t.status.toUpperCase()}</td>
-                        <td style="font-size:12px">${action}</td>
+                        <td>${partner}</td>
+                        <td>${flow} CR</td>
+                        <td>
+                            <span class="status-badge bg-${t.status}">${t.status.toUpperCase()}</span><br>
+                            ${action}
+                        </td>
                     </tr>`;
                 });
             });
         }
 
-        window.releaseCredits = async (transId, teacherId) => {
+        window.releasePayment = async (transId, teacherId) => {
             const uSnap = await getDoc(doc(db, "users", user.uid));
             if(uSnap.data().credits < 1) return alert("Insufficient Credits.");
             await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
             await updateDoc(doc(db, "users", teacherId), { credits: increment(1) });
             await updateDoc(doc(db, "transactions", transId), { status: 'completed' });
-            alert("Credit Transferred Successfully.");
+            alert("Credit Transferred.");
         };
-
-        function loadMySkills() {
-            const q = query(collection(db, "skills"), where("uid", "==", user.uid));
-            onSnapshot(q, s => {
-                const feed = document.getElementById('mySkillsFeed');
-                feed.innerHTML = '';
-                s.forEach(d => {
-                    feed.innerHTML += `<div class="card"><h3>${d.data().title}</h3>
-                    <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">REMOVE POST</button></div>`;
-                });
-            });
-        }
-        window.deleteSkill = async (id) => { if(confirm("Permanently delete this post?")) await deleteDoc(doc(db, "skills", id)); };
     </script>
 </body>
 </html>
