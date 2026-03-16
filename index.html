@@ -208,6 +208,7 @@
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
                 alert("Access Granted.");
+                window.location.href="dashboard.html";
                 closeModal();
             } catch (err) { alert(err.message); }
         };
