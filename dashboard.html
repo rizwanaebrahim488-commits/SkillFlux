@@ -3,119 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Cyber Command</title>
+    <title>SkillFlux | Professional Grid</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
-            --bg: #000000; --card-bg: #0a0a0c; --accent: #00f2ff; --secondary: #7000ff; 
-            --border: #1a1a1f; --text-main: #ffffff; --text-dim: #888888;
-            --danger: #ff0055; --pending: #ffb700; --success: #00ffa2;
+            --bg: #050505; --sidebar-bg: #0a0a0b; --card-bg: #111114; 
+            --accent: #00d4ff; --secondary: #6366f1; --border: #1f1f23; 
+            --text-main: #f8fafc; --text-dim: #94a3b8; --danger: #ef4444; 
+            --success: #10b981; --pending: #f59e0b;
         }
 
-        body { margin: 0; background: var(--bg); color: var(--text-main); font-family: 'Segoe UI', sans-serif; letter-spacing: 0.5px; }
+        body { margin: 0; background: var(--bg); color: var(--text-main); font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
 
+        /* Navigation & Sidebar */
         nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 12px 40px; background: rgba(10, 10, 12, 0.9); border-bottom: 1px solid var(--border); 
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(15px);
+            padding: 15px 25px; background: rgba(5, 5, 5, 0.8); border-bottom: 1px solid var(--border); 
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px);
+        }
+        .menu-trigger { font-size: 20px; color: var(--accent); cursor: pointer; transition: 0.3s; }
+        .nav-brand { font-weight: 800; letter-spacing: 2px; font-size: 20px; color: var(--text-main); text-decoration: none; }
+        
+        .sidebar { 
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%; 
+            background: var(--sidebar-bg); border-right: 1px solid var(--border); 
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200; padding: 40px 20px; 
+            display: flex; flex-direction: column;
+        }
+        .sidebar.active { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
+        .sidebar-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.6); display: none; z-index: 150; 
         }
 
-        .nav-brand { font-weight: 900; background: linear-gradient(to right, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 4px; font-size: 22px; text-decoration: none; }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-link { color: var(--text-dim); text-decoration: none; cursor: pointer; font-size: 10px; font-weight: 800; text-transform: uppercase; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: var(--accent); }
-        
-        .user-stats { background: #111; padding: 6px 15px; border: 1px solid var(--secondary); color: var(--accent); font-weight: 900; border-radius: 20px; }
+        .sidebar h3 { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .side-link { 
+            padding: 12px 15px; color: var(--text-main); text-decoration: none; 
+            font-size: 14px; display: flex; align-items: center; gap: 12px; 
+            border-radius: 8px; margin-bottom: 5px; transition: 0.2s; cursor: pointer;
+        }
+        .side-link:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
+        .side-link.logout { margin-top: auto; color: var(--danger); }
 
-        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        /* Dashboard UI */
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
         .hidden { display: none; }
-
-        .card { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 12px; margin-bottom: 20px; transition: 0.3s; }
-        .card:hover { border-color: var(--secondary); transform: translateY(-2px); }
+        .card { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
         
-        h2 { font-size: 10px; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        h2::after { content: ""; height: 1px; flex-grow: 1; background: var(--border); }
+        .section-header { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .section-header::after { content: ""; height: 1px; flex-grow: 1; background: var(--border); }
 
-        .btn { padding: 12px 20px; border: none; cursor: pointer; font-weight: 800; border-radius: 6px; font-size: 10px; text-transform: uppercase; transition: 0.3s; }
-        .btn-primary { background: var(--accent); color: #000; box-shadow: 0 4px 15px rgba(0, 242, 255, 0.2); }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-danger { background: rgba(255, 0, 85, 0.1); border: 1px solid var(--danger); color: var(--danger); }
+        .btn { padding: 10px 16px; border: none; cursor: pointer; font-weight: 700; border-radius: 6px; font-size: 11px; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
-        input { width: 100%; background: #0c0c0e; border: 1px solid var(--border); color: #fff; padding: 14px; margin-bottom: 12px; border-radius: 8px; box-sizing: border-box; }
-        input:focus { border-color: var(--secondary); outline: none; }
+        input, textarea { 
+            width: 100%; background: #000; border: 1px solid var(--border); color: #fff; 
+            padding: 12px; margin-bottom: 12px; border-radius: 8px; box-sizing: border-box; 
+        }
+        input:focus { border-color: var(--accent); outline: none; }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 9px; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 13px; color: #eee; }
-
-        .profile-detail { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #111; font-size: 13px; }
-        .detail-label { color: var(--text-dim); font-weight: bold; }
+        .user-pill { background: #1a1a1e; padding: 6px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); color: var(--accent); }
     </style>
 </head>
 <body>
 
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    
+    <div class="sidebar" id="sidebar">
+        <h3>Command Menu</h3>
+        <div class="side-link" onclick="switchTab('feed')"><i class="fas fa-globe"></i> Market Place</div>
+        <div class="side-link" onclick="switchTab('my-posts')"><i class="fas fa-box"></i> My Inventory</div>
+        <div class="side-link" onclick="switchTab('requests')"><i class="fas fa-bell"></i> Alerts</div>
+        <div class="side-link" onclick="switchTab('history')"><i class="fas fa-list"></i> History</div>
+        
+        <h3 style="margin-top: 30px;">Security</h3>
+        <div class="side-link" onclick="switchTab('profile')"><i class="fas fa-user-shield"></i> Account Details</div>
+        <div class="side-link logout" onclick="handleLogout()"><i class="fas fa-power-off"></i> Terminate Session</div>
+    </div>
+
     <nav>
-        <div class="nav-links">
-            <a href="#" class="nav-brand">SKILLFLUX</a>
-            <a class="nav-link active" id="link-feed" onclick="showSection('feed')">Market</a>
-            <a class="nav-link" id="link-my-posts" onclick="showSection('my-posts')">Inventory</a>
-            <a class="nav-link" id="link-requests" onclick="showSection('requests')">Alerts</a>
-            <a class="nav-link" id="link-history" onclick="showSection('history')">Ledger</a>
-            <a class="nav-link" id="link-profile" onclick="showSection('profile')">Account</a>
-        </div>
-        <div style="display: flex; gap: 20px; align-items: center;">
-            <div class="user-stats"><span id="creditBalance">0</span> CR</div>
-            <a href="#" onclick="handleLogout()" class="nav-link" style="color: var(--danger);">Disconnect</a>
-        </div>
+        <div class="menu-trigger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+        <a href="#" class="nav-brand">SKILLFLUX</a>
+        <div class="user-pill"><span id="creditBalance">0</span> CR</div>
     </nav>
 
     <div class="container">
-        <!-- GLOBAL MARKET -->
+        <!-- MARKET PLACE (OTHERS ONLY) -->
         <section id="feedSection">
-            <h2>Live Protocol Grid (Global)</h2>
+            <div class="section-header">Market Place</div>
             <div id="globalFeed"></div>
         </section>
 
-        <!-- MY INVENTORY (STRICT PRIVACY) -->
+        <!-- INVENTORY (YOUR POSTS ONLY) -->
         <section id="my-postsSection" class="hidden">
-            <h2>Deploy New Protocol</h2>
-            <div class="card" style="border: 1px dashed var(--secondary);">
-                <input type="text" id="skillTitle" placeholder="Skill Name">
-                <input type="text" id="skillDesc" placeholder="Brief Description">
-                <button class="btn btn-primary" id="saveBtn">Deploy to Network</button>
+            <div class="section-header">Inventory Deployment</div>
+            <div class="card">
+                <input type="text" id="skillTitle" placeholder="Skill Title">
+                <textarea id="skillDesc" placeholder="Describe your expertise..."></textarea>
+                <button class="btn btn-primary" id="saveBtn">Publish to Inventory</button>
             </div>
-            <h2>Your Active Protocols</h2>
+            <div class="section-header">Active Inventory</div>
             <div id="mySkillsFeed"></div>
         </section>
 
         <!-- ALERTS -->
         <section id="requestsSection" class="hidden">
-            <h2>Access Requests</h2>
+            <div class="section-header">Session Alerts</div>
             <div id="incomingList"></div>
         </section>
 
-        <!-- LEDGER -->
+        <!-- HISTORY -->
         <section id="historySection" class="hidden">
-            <h2>Credit Transactions</h2>
-            <table>
-                <thead><tr><th>Protocol</th><th>Partner</th><th>Credit</th><th>Status</th></tr></thead>
-                <tbody id="historyBody"></tbody>
-            </table>
+            <div class="section-header">Transaction Log</div>
+            <div id="historyBody"></div>
         </section>
 
-        <!-- PROFILE / ACCOUNT SETTINGS -->
+        <!-- PROFILE -->
         <section id="profileSection" class="hidden">
-            <h2>Account Credentials</h2>
+            <div class="section-header">Account Protocol</div>
             <div class="card">
-                <div class="profile-detail"><span class="detail-label">Email:</span> <span id="profEmail">loading...</span></div>
-                <div class="profile-detail"><span class="detail-label">User ID:</span> <span id="profUid" style="font-family: monospace; font-size: 11px;">loading...</span></div>
-                <div class="profile-detail"><span class="detail-label">Last Session End:</span> <span id="lastLogout">Never</span></div>
-            </div>
-
-            <h2>Security Matrix</h2>
-            <div class="card">
-                <input type="password" id="newPass" placeholder="Enter New Password">
-                <button class="btn btn-outline" onclick="changePassword()">Update Security Protocol</button>
+                <p style="font-size: 12px; color: var(--text-dim);">AUTHORIZED EMAIL</p>
+                <p id="profEmail" style="font-weight: bold; margin-bottom: 20px;">...</p>
+                
+                <p style="font-size: 12px; color: var(--text-dim);">CREDENTIAL MANAGEMENT</p>
+                <input type="password" id="newPass" placeholder="New Password">
+                <button class="btn btn-outline" onclick="changePassword()">Update Password</button>
             </div>
         </section>
     </div>
@@ -139,135 +153,97 @@
         const db = getFirestore(app);
         let user = null;
 
-        window.showSection = (name) => {
-            ['feed', 'my-posts', 'requests', 'history', 'profile'].forEach(s => {
-                document.getElementById(s+'Section').classList.add('hidden');
-                document.getElementById('link-'+s).classList.remove('active');
+        // UI Helpers
+        window.toggleSidebar = () => {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').style.display = 
+                document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
+        };
+
+        window.switchTab = (tab) => {
+            ['feed', 'my-posts', 'requests', 'history', 'profile'].forEach(id => {
+                document.getElementById(id+'Section').classList.add('hidden');
             });
-            document.getElementById(name+'Section').classList.remove('hidden');
-            document.getElementById('link-'+name).classList.add('active');
+            document.getElementById(tab+'Section').classList.remove('hidden');
+            toggleSidebar();
         };
 
         onAuthStateChanged(auth, u => {
-            if(u) { 
-                user = u; 
-                init();
-                document.getElementById('profEmail').innerText = u.email;
-                document.getElementById('profUid').innerText = u.uid;
-                document.getElementById('lastLogout').innerText = localStorage.getItem('lastLogout') || 'First Session';
-            } else { 
-                window.location.href="index.html"; 
-            }
+            if(u) { user = u; init(); document.getElementById('profEmail').innerText = u.email; }
+            else { window.location.href="index.html"; }
         });
 
         function init() {
             onSnapshot(doc(db, "users", user.uid), s => { if(s.exists()) document.getElementById('creditBalance').innerText = s.data().credits; });
-            loadGlobalFeed();
-            loadMySkills();
-            loadIncomingRequests();
+            loadMarket();
+            loadInventory();
             loadHistory();
         }
 
-        // --- PASSWORD UPDATE ---
+        // --- ACCOUNT LOGIC ---
         window.changePassword = async () => {
-            const newP = document.getElementById('newPass').value;
-            if(newP.length < 6) return alert("Security too weak. Use 6+ chars.");
-            try {
-                await updatePassword(user, newP);
-                alert("Security Protocol Updated Successfully.");
-                document.getElementById('newPass').value = '';
-            } catch (e) { alert("Session timed out. Re-login to change password."); }
+            const p = document.getElementById('newPass').value;
+            if(p.length < 6) return alert("Password too short.");
+            await updatePassword(user, p).then(() => alert("Password Updated.")).catch(e => alert("Re-login required."));
         };
 
-        // --- LOGOUT LOGIC ---
-        window.handleLogout = async () => {
-            localStorage.setItem('lastLogout', new Date().toLocaleString());
-            await signOut(auth);
-            window.location.href="index.html";
-        };
+        window.handleLogout = () => signOut(auth);
 
-        // --- POSTING & INVENTORY (Strict Isolation) ---
+        // --- POSTING & INVENTORY ISOLATION ---
         document.getElementById('saveBtn').onclick = async () => {
             const title = document.getElementById('skillTitle').value;
             const desc = document.getElementById('skillDesc').value;
             if(!title) return;
             await addDoc(collection(db, "skills"), { title, desc, uid: user.uid, email: user.email, timestamp: serverTimestamp() });
             document.getElementById('skillTitle').value = ''; document.getElementById('skillDesc').value = '';
+            alert("Published to Inventory.");
         };
 
-        function loadMySkills() {
+        function loadInventory() {
+            // Only see YOUR OWN posts in Inventory
             const q = query(collection(db, "skills"), where("uid", "==", user.uid));
             onSnapshot(q, s => {
-                const feed = document.getElementById('mySkillsFeed');
-                feed.innerHTML = s.empty ? '<p style="color:#222">Inventory Empty.</p>' : '';
+                const div = document.getElementById('mySkillsFeed');
+                div.innerHTML = s.empty ? '<p style="color:#333">No items.</p>' : '';
                 s.forEach(d => {
-                    feed.innerHTML += `<div class="card" style="border-left: 3px solid var(--secondary)">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <b style="color:var(--accent)">${d.data().title}</b>
-                            <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">Purge</button>
-                        </div>
-                    </div>`;
+                    div.innerHTML += `<div class="card"><b>${d.data().title}</b><br><button class="btn btn-outline" style="margin-top:10px" onclick="deleteSkill('${d.id}')">Delete</button></div>`;
                 });
             });
         }
-        window.deleteSkill = async (id) => { if(confirm("Confirm Purge?")) await deleteDoc(doc(db, "skills", id)); };
+        window.deleteSkill = (id) => deleteDoc(doc(db, "skills", id));
 
-        // --- GLOBAL MARKET (Hide Own) ---
-        function loadGlobalFeed() {
+        function loadMarket() {
+            // Only see OTHERS' posts in Market
             onSnapshot(collection(db, "skills"), s => {
-                const feed = document.getElementById('globalFeed');
-                feed.innerHTML = '';
+                const div = document.getElementById('globalFeed');
+                div.innerHTML = '';
                 s.forEach(d => {
                     const data = d.data();
-                    if(data.uid === user.uid) return; // HIDDEN FROM YOU
-                    feed.innerHTML += `<div class="card">
-                        <h3 style="color:var(--accent); margin:0 0 10px 0;">${data.title}</h3>
+                    if(data.uid === user.uid) return; // SKIP YOUR OWN
+                    div.innerHTML += `<div class="card">
+                        <h3 style="color:var(--accent); margin-top:0;">${data.title}</h3>
                         <p style="color:var(--text-dim); font-size:13px;">${data.desc}</p>
-                        <button class="btn btn-outline" style="width:100%; margin-top:15px;" onclick="requestAccess('${d.id}', '${data.uid}', '${data.title}')">Acquire (1 CR)</button>
+                        <button class="btn btn-primary" onclick="buy('${d.id}','${data.uid}','${data.title}')">Acquire (1 CR)</button>
                     </div>`;
                 });
             });
         }
 
-        window.requestAccess = async (skillId, teacherId, title) => {
-            const uSnap = await getDoc(doc(db, "users", user.uid));
-            if(uSnap.data().credits < 1) return alert("Credit Deficit.");
+        window.buy = async (sid, tid, title) => {
+            const u = await getDoc(doc(db, "users", user.uid));
+            if(u.data().credits < 1) return alert("No Credits.");
             await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
-            await addDoc(collection(db, "transactions"), { skillId, title, teacherId, learnerId: user.uid, learnerEmail: user.email, status: 'pending', created: serverTimestamp() });
-            alert("Request sent. Credit locked in Escrow.");
-        };
-
-        // --- ALERTS & HISTORY (REDACTED FOR BREVITY - PREVIOUS LOGIC REMAINS) ---
-        function loadIncomingRequests() {
-            const q = query(collection(db, "transactions"), where("teacherId", "==", user.uid), where("status", "==", "pending"));
-            onSnapshot(q, s => {
-                const list = document.getElementById('incomingList');
-                list.innerHTML = s.empty ? '<p style="color:#222">Systems Nominal.</p>' : '';
-                s.forEach(d => {
-                    const t = d.data();
-                    list.innerHTML += `<div class="card" style="border-left: 3px solid var(--pending)">
-                        <h4 style="margin:0 0 10px 0;">${t.learnerEmail} >> ${t.title}</h4>
-                        <input type="text" id="link-${d.id}" placeholder="Meet Link">
-                        <button class="btn btn-primary" onclick="accept('${d.id}')">Authorize</button>
-                    </div>`;
-                });
-            });
-        }
-        window.accept = async (id) => {
-            const link = document.getElementById(`link-${id}`).value;
-            if(!link) return;
-            await updateDoc(doc(db, "transactions", id), { link, status: 'approved' });
+            await addDoc(collection(db, "transactions"), { skillId: sid, title, teacherId: tid, learnerId: user.uid, status: 'pending' });
+            alert("Request sent. Credit Escrowed.");
         };
 
         function loadHistory() {
             onSnapshot(collection(db, "transactions"), s => {
-                const body = document.getElementById('historyBody');
-                body.innerHTML = '';
+                const div = document.getElementById('historyBody'); div.innerHTML = '';
                 s.forEach(d => {
                     const t = d.data();
                     if(t.learnerId !== user.uid && t.teacherId !== user.uid) return;
-                    let flow = t.teacherId === user.uid ? `<span style="color:var(--success)">+1.00</span>` : `<span style="color:var(--danger)">-1.00</span>`;
-                    body.innerHTML += `<tr><td>${t.title}</td><td>${t.teacherId === user.uid ? t.learnerEmail : 'Teacher'}</td><td>${flow}</td><td>${t.status.toUpperCase()}</td></tr>`;
+                    div.innerHTML += `<div class="card"><b>${t.title}</b> | Status: ${t.status}</div>`;
                 });
             });
         }
