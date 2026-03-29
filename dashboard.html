@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Professional Skill Exchange</title>
+    <title>SkillFlux | Professional Emerald</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
             --bg: #0f1113; 
             --sidebar-bg: #16191c; 
             --card-bg: #1c2024; 
-            --accent: #10b981; /* Emerald */
+            --accent: #10b981; 
             --border: #2a2f35; 
             --text-main: #f1f5f9; 
             --text-dim: #94a3b8; 
@@ -33,7 +33,7 @@
             transition: 0.3s;
         }
         .nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .nav-brand { font-weight: 800; font-size: 22px; color: #fff; text-decoration: none; margin-right: 50px; letter-spacing: -1px; }
+        .nav-brand { font-weight: 800; font-size: 22px; color: #fff; text-decoration: none; margin-right: 50px; }
 
         /* Right Sidebar */
         .sidebar { 
@@ -45,7 +45,7 @@
         .sidebar.active { right: 0; box-shadow: -15px 0 40px rgba(0,0,0,0.6); }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 150; }
 
-        /* Layout */
+        /* Content Area */
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         .hidden { display: none; }
         .card { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 12px; margin-bottom: 25px; position: relative; }
@@ -53,98 +53,76 @@
         .section-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
         .section-label::after { content: ""; height: 1px; flex-grow: 1; background: var(--border); }
 
-        /* Buttons & Inputs */
         .btn { padding: 12px 22px; border: none; cursor: pointer; font-weight: 700; border-radius: 8px; font-size: 11px; text-transform: uppercase; transition: 0.2s; }
         .btn-primary { background: var(--accent); color: #000; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
         .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
-        .btn-danger:hover { background: var(--danger); color: #fff; }
 
         input, textarea { 
             width: 100%; background: #0f1113; border: 1px solid var(--border); color: #fff; 
-            padding: 14px; margin-bottom: 15px; border-radius: 8px; box-sizing: border-box; font-family: inherit;
+            padding: 14px; margin-bottom: 15px; border-radius: 8px; box-sizing: border-box; 
         }
         input:focus { border-color: var(--accent); outline: none; }
 
-        /* Profile details in sidebar */
         .profile-info { background: #0f1113; padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 25px; }
-        .info-row { margin-bottom: 15px; }
-        .info-row:last-child { margin-bottom: 0; }
-        .info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; display: block; }
     </style>
 </head>
 <body>
 
     <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
     
-    <!-- Right Sidebar: Account & Credentials -->
+    <!-- Right Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="section-label">Account Security</div>
-        
         <div class="profile-info">
-            <div class="info-row">
-                <span class="info-label">Active Email</span>
-                <b id="profEmail">...</b>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Member ID</span>
-                <small id="profUid" style="font-family: monospace; color: var(--text-dim);">...</small>
-            </div>
+            <div style="margin-bottom: 10px;"><small style="color:var(--text-dim)">EMAIL</small><br><b id="profEmail">...</b></div>
+            <div><small style="color:var(--text-dim)">USER ID</small><br><small id="profUid" style="font-family: monospace;">...</small></div>
         </div>
 
         <div class="section-label">Credentials</div>
-        <input type="password" id="newPass" placeholder="Enter New Password">
-        <button class="btn btn-outline" style="width: 100%;" onclick="changePassword()">Update Password</button>
+        <input type="password" id="newPass" placeholder="New Password">
+        <button class="btn btn-outline" style="width: 100%;" onclick="changePassword()">Change Password</button>
 
-        <button class="btn btn-danger" style="margin-top: auto; width: 100%;" onclick="handleLogout()">
-            <i class="fas fa-sign-out-alt"></i> Terminate Session
-        </button>
+        <button class="btn btn-danger" style="margin-top: auto; width: 100%;" onclick="handleLogout()">Logout</button>
     </div>
 
-    <!-- Top Navigation -->
+    <!-- Navigation -->
     <nav>
         <div class="nav-links">
             <a href="#" class="nav-brand">SKILLFLUX</a>
             <div class="nav-item active" id="tab-market" onclick="switchTab('market')">Market Place</div>
             <div class="nav-item" id="tab-inventory" onclick="switchTab('inventory')">My Inventory</div>
-            <div class="nav-item" id="tab-alerts" onclick="switchTab('alerts')">Alerts</div>
         </div>
         <div style="display: flex; align-items: center; gap: 20px;">
-            <div style="color: var(--accent); font-weight: 800; font-size: 14px;"><span id="creditBalance">0</span> CR</div>
-            <div style="cursor: pointer; font-size: 24px; color: var(--text-dim);" onclick="toggleSidebar()"><i class="fas fa-user-circle"></i></div>
+            <div style="color: var(--accent); font-weight: 800;"><span id="creditBalance">0</span> CR</div>
+            <div style="cursor: pointer; font-size: 24px;" onclick="toggleSidebar()"><i class="fas fa-user-circle"></i></div>
         </div>
     </nav>
 
     <div class="container">
-        <!-- MARKET PLACE: See other people's posts -->
+        <!-- MARKET PLACE (OTHERS ONLY) -->
         <section id="marketSection">
-            <div class="section-label">Available Skills (Global)</div>
+            <div class="section-label">Global Market</div>
             <div id="marketFeed"></div>
         </section>
 
-        <!-- MY INVENTORY: See and Manage your own posts -->
+        <!-- MY INVENTORY (YOU ONLY) -->
         <section id="inventorySection" class="hidden">
-            <div class="section-label">Deploy New Skill</div>
+            <div class="section-label">Create New Listing</div>
             <div class="card">
                 <input type="text" id="skillTitle" placeholder="Skill Name">
-                <textarea id="skillDesc" rows="3" placeholder="Describe your expertise..."></textarea>
-                <button class="btn btn-primary" id="saveBtn">Add to My Inventory</button>
+                <textarea id="skillDesc" rows="3" placeholder="Describe expertise..."></textarea>
+                <button class="btn btn-primary" id="saveBtn">Add to Inventory</button>
             </div>
             <div class="section-label">My Posted Skills</div>
             <div id="mySkillsFeed"></div>
-        </section>
-
-        <!-- ALERTS -->
-        <section id="alertsSection" class="hidden">
-            <div class="section-label">Incoming Requests</div>
-            <div id="incomingList"></div>
         </section>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, updateDoc, deleteDoc, increment, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, addDoc, onSnapshot, updateDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD3UlP_V8aDYmybmcIseDn-NkVIE2CNhT8",
@@ -160,14 +138,13 @@
         const db = getFirestore(app);
         let user = null;
 
-        // UI Handlers
         window.toggleSidebar = () => {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
         };
 
         window.switchTab = (tab) => {
-            ['market', 'inventory', 'alerts'].forEach(t => {
+            ['market', 'inventory'].forEach(t => {
                 document.getElementById(t+'Section').classList.add('hidden');
                 document.getElementById('tab-'+t).classList.remove('active');
             });
@@ -188,21 +165,17 @@
             onSnapshot(doc(db, "users", user.uid), s => { if(s.exists()) document.getElementById('creditBalance').innerText = s.data().credits; });
             loadMarket();
             loadMyInventory();
-            loadIncomingRequests();
         }
 
-        // --- PASSWORD & LOGOUT ---
+        // --- ACCOUNT ---
         window.changePassword = async () => {
             const p = document.getElementById('newPass').value;
-            if(p.length < 6) return alert("Password must be 6+ chars.");
-            try {
-                await updatePassword(user, p);
-                alert("Password updated.");
-            } catch(e) { alert("Please log in again to change password."); }
+            if(p.length < 6) return alert("Min 6 chars.");
+            await updatePassword(user, p).then(() => alert("Updated!")).catch(e => alert("Login again first."));
         };
         window.handleLogout = () => signOut(auth);
 
-        // --- SKILL MANAGEMENT ---
+        // --- SKILL LOGIC ---
         document.getElementById('saveBtn').onclick = async () => {
             const title = document.getElementById('skillTitle').value;
             const desc = document.getElementById('skillDesc').value;
@@ -212,76 +185,41 @@
             });
             document.getElementById('skillTitle').value = '';
             document.getElementById('skillDesc').value = '';
-            alert("Skill added to your inventory!");
         };
 
-        // INVENTORY: Shows ONLY YOUR posts with a DELETE button
+        // THE FIX: "where('uid', '==', user.uid)" makes it private to Sana or Bilha
         function loadMyInventory() {
             const q = query(collection(db, "skills"), where("uid", "==", user.uid));
             onSnapshot(q, s => {
                 const div = document.getElementById('mySkillsFeed');
-                div.innerHTML = s.empty ? '<p style="color:var(--text-dim)">No skills in your inventory yet.</p>' : '';
+                div.innerHTML = s.empty ? '<p>No items.</p>' : '';
                 s.forEach(d => {
-                    div.innerHTML += `
-                        <div class="card">
-                            <h3 style="margin:0; color:var(--accent)">${d.data().title}</h3>
-                            <p style="color:var(--text-dim); font-size:13px; margin:10px 0;">${d.data().desc}</p>
-                            <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">Delete Skill</button>
-                        </div>`;
+                    div.innerHTML += `<div class="card">
+                        <b>${d.data().title}</b>
+                        <p>${d.data().desc}</p>
+                        <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">Delete Skill</button>
+                    </div>`;
                 });
             });
         }
-        window.deleteSkill = (id) => { if(confirm("Permanently delete this skill?")) deleteDoc(doc(db, "skills", id)); };
+        window.deleteSkill = (id) => deleteDoc(doc(db, "skills", id));
 
-        // MARKET: Shows ALL OTHER skills (Exclude yours), NO delete button
+        // MARKET: Shows everyone else except current user
         function loadMarket() {
             onSnapshot(collection(db, "skills"), s => {
                 const div = document.getElementById('marketFeed');
                 div.innerHTML = '';
-                let count = 0;
                 s.forEach(d => {
                     const data = d.data();
-                    if(data.uid === user.uid) return; // THIS IS THE KEY: Hidden if it's yours
-                    count++;
-                    div.innerHTML += `
-                        <div class="card">
-                            <h3 style="margin:0; color:var(--accent)">${data.title}</h3>
-                            <p style="color:var(--text-dim); font-size:13px; margin:15px 0;">${data.desc}</p>
-                            <button class="btn btn-primary" onclick="buySkill('${d.id}','${data.uid}','${data.title}')">Request Skill (1 CR)</button>
-                        </div>`;
-                });
-                if(count === 0) div.innerHTML = '<p style="color:var(--text-dim)">Market is empty right now.</p>';
-            });
-        }
-
-        window.buySkill = async (sid, tid, title) => {
-            const u = await getDoc(doc(db, "users", user.uid));
-            if(u.data().credits < 1) return alert("Not enough credits.");
-            await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
-            await addDoc(collection(db, "transactions"), { skillId: sid, title, teacherId: tid, learnerId: user.uid, status: 'pending' });
-            alert("Request sent successfully.");
-        };
-
-        function loadIncomingRequests() {
-            const q = query(collection(db, "transactions"), where("teacherId", "==", user.uid), where("status", "==", "pending"));
-            onSnapshot(q, s => {
-                const div = document.getElementById('incomingList');
-                div.innerHTML = s.empty ? '<p style="color:var(--text-dim)">No active requests.</p>' : '';
-                s.forEach(d => {
-                    div.innerHTML += `
-                        <div class="card" style="border-left: 4px solid var(--accent)">
-                            <b>${d.data().title}</b> request received.
-                            <input type="text" id="link-${d.id}" placeholder="Meeting Link" style="margin-top:10px;">
-                            <button class="btn btn-primary" style="width:100%" onclick="approve('${d.id}')">Approve & Send Link</button>
-                        </div>`;
+                    if(data.uid === user.uid) return; // HIDE OWN POSTS FROM MARKET
+                    div.innerHTML += `<div class="card">
+                        <h3 style="color:var(--accent)">${data.title}</h3>
+                        <p>${data.desc}</p>
+                        <button class="btn btn-primary">Request Access</button>
+                    </div>`;
                 });
             });
         }
-        window.approve = async (id) => {
-            const link = document.getElementById(`link-${id}`).value;
-            if(!link) return;
-            await updateDoc(doc(db, "transactions", id), { link, status: 'approved' });
-        };
     </script>
 </body>
 </html>
