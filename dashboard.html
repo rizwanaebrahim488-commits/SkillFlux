@@ -3,98 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Professional Command</title>
+    <title>SkillFlux | Cyber Command</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
-            --bg: #000000; --card: #080808; --accent: #00d4ff; --border: #1a1a1a; 
-            --text: #ffffff; --danger: #ff3333; --pending: #ffaa00; --success: #00ff88;
+            --bg: #000000; 
+            --card-bg: #0a0a0c;
+            --accent: #00f2ff; /* Neon Cyan */
+            --secondary: #7000ff; /* Electric Purple */
+            --border: #1a1a1f; 
+            --text-main: #ffffff;
+            --text-dim: #888888;
+            --danger: #ff0055;
+            --pending: #ffb700;
+            --success: #00ffa2;
         }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
-        
+
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* Glassmorphism Nav */
         nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 40px; background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border); 
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+            padding: 12px 40px; 
+            background: rgba(10, 10, 12, 0.8);
+            border-bottom: 1px solid var(--border); 
+            position: sticky; top: 0; z-index: 100; 
+            backdrop-filter: blur(15px);
         }
-        .nav-brand { font-weight: 900; color: var(--accent); letter-spacing: 4px; font-size: 22px; text-decoration: none; }
-        .nav-link { color: #555; text-decoration: none; cursor: pointer; font-size: 11px; font-weight: 700; text-transform: uppercase; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: var(--accent); }
-        .user-stats { background: #111; padding: 8px 15px; border: 1px solid var(--border); color: var(--accent); font-weight: 800; border-radius: 4px; }
+
+        .nav-brand { 
+            font-weight: 900; 
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 5px; 
+            font-size: 24px; 
+            text-decoration: none; 
+        }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+
+        .nav-link { 
+            color: var(--text-dim); 
+            text-decoration: none; 
+            cursor: pointer; 
+            font-size: 11px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active { color: var(--accent); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+        
+        .user-stats { 
+            background: linear-gradient(45deg, #111, #000);
+            padding: 6px 15px; 
+            border: 1px solid var(--secondary); 
+            color: var(--accent); 
+            font-weight: 900; 
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(112, 0, 255, 0.2);
+        }
 
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         .hidden { display: none; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 6px; margin-bottom: 20px; }
-        
-        h2 { font-size: 11px; color: #444; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 25px; border-left: 2px solid var(--accent); padding-left: 15px; }
-        
-        .btn { padding: 10px 18px; border: none; cursor: pointer; font-weight: 700; border-radius: 3px; font-size: 10px; text-transform: uppercase; transition: 0.2s; }
-        .btn-primary { background: var(--accent); color: #000; }
-        .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-danger { background: #1a0000; border: 1px solid var(--danger); color: var(--danger); }
-        
-        input, textarea { width: 100%; background: #050505; border: 1px solid #1a1a1a; color: #fff; padding: 12px; margin-bottom: 10px; border-radius: 4px; box-sizing: border-box; }
-        input:focus { border-color: var(--accent); outline: none; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; padding: 12px; color: #444; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid #111; }
-        td { padding: 15px; border-bottom: 1px solid #080808; font-size: 13px; color: #bbb; }
+        /* Cyber Card Styling */
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            padding: 25px; 
+            border-radius: 12px; 
+            margin-bottom: 25px; 
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .card:hover { 
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(112, 0, 255, 0.1);
+        }
         
-        .notification-badge { background: var(--danger); color: white; padding: 2px 6px; border-radius: 50%; font-size: 10px; margin-left: 5px; }
-        .status-tag { font-size: 9px; padding: 3px 7px; border-radius: 3px; font-weight: 900; background: #111; }
+        h2 { 
+            font-size: 10px; color: var(--text-dim); 
+            letter-spacing: 4px; text-transform: uppercase; 
+            margin-bottom: 30px; 
+            display: flex; align-items: center; gap: 10px;
+        }
+        h2::after { content: ""; height: 1px; flex-grow: 1; background: var(--border); }
+
+        /* Buttons */
+        .btn { 
+            padding: 12px 20px; border: none; cursor: pointer; 
+            font-weight: 800; border-radius: 6px; 
+            font-size: 10px; text-transform: uppercase; 
+            transition: 0.3s; 
+        }
+        .btn-primary { 
+            background: var(--accent); color: #000; 
+            box-shadow: 0 4px 15px rgba(0, 242, 255, 0.3);
+        }
+        .btn-primary:hover { background: #fff; transform: scale(1.02); }
+        
+        .btn-outline { 
+            background: transparent; border: 1px solid var(--accent); color: var(--accent); 
+        }
+        .btn-outline:hover { background: rgba(0, 242, 255, 0.1); }
+
+        .btn-danger { background: rgba(255, 0, 85, 0.1); border: 1px solid var(--danger); color: var(--danger); }
+
+        /* Forms */
+        input, textarea { 
+            width: 100%; background: #0c0c0e; border: 1px solid var(--border); 
+            color: #fff; padding: 14px; margin-bottom: 12px; border-radius: 8px; 
+            box-sizing: border-box; transition: 0.3s;
+        }
+        input:focus { border-color: var(--secondary); outline: none; background: #111; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 9px; text-transform: uppercase; }
+        td { padding: 18px 15px; border-bottom: 1px solid var(--border); font-size: 13px; color: #eee; }
+
+        .notification-badge { 
+            background: var(--danger); color: white; padding: 2px 6px; 
+            border-radius: 4px; font-size: 9px; vertical-align: middle;
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <div style="display: flex; align-items: center; gap: 30px;">
+        <div class="nav-links">
             <a href="#" class="nav-brand">SKILLFLUX</a>
             <a class="nav-link active" id="link-feed" onclick="showSection('feed')">Market</a>
             <a class="nav-link" id="link-my-posts" onclick="showSection('my-posts')">Inventory</a>
             <a class="nav-link" id="link-requests" onclick="showSection('requests')">Alerts <span id="reqCount" class="hidden notification-badge">0</span></a>
             <a class="nav-link" id="link-history" onclick="showSection('history')">Ledger</a>
         </div>
-        <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="display: flex; gap: 20px; align-items: center;">
             <div class="user-stats"><span id="creditBalance">0</span> CR</div>
-            <a href="index.html" class="nav-link" style="color: var(--danger);">Exit</a>
+            <a href="index.html" class="nav-link" style="color: var(--danger);">Disconnect</a>
         </div>
     </nav>
 
     <div class="container">
-        <!-- GLOBAL FEED -->
+        <!-- GLOBAL MARKET -->
         <section id="feedSection">
-            <h2>Global Skill Grid</h2>
+            <h2>Live Protocol Grid</h2>
             <div id="globalFeed"></div>
         </section>
 
-        <!-- MY POSTS (PRIVATE) -->
+        <!-- MY INVENTORY (ONLY YOURS) -->
         <section id="my-postsSection" class="hidden">
             <h2>Initialize Listing</h2>
-            <div class="card">
-                <input type="text" id="skillTitle" placeholder="Protocol Name (e.g. Python Backend)">
-                <textarea id="skillDesc" rows="3" placeholder="Scope of knowledge transfer..."></textarea>
-                <button class="btn btn-primary" id="saveBtn">Deploy to Grid</button>
+            <div class="card" style="border: 1px dashed var(--secondary);">
+                <input type="text" id="skillTitle" placeholder="Protocol Name (e.g. Neural Networks)">
+                <textarea id="skillDesc" rows="3" placeholder="Describe the expertise parameters..."></textarea>
+                <button class="btn btn-primary" id="saveBtn">Deploy to Network</button>
             </div>
             <h2>Your Active Protocols</h2>
             <div id="mySkillsFeed"></div>
         </section>
 
-        <!-- REQUESTS (NOTIFICATIONS) -->
+        <!-- ALERTS -->
         <section id="requestsSection" class="hidden">
-            <h2>Incoming Session Alerts</h2>
+            <h2>Access Requests</h2>
             <div id="incomingList"></div>
         </section>
 
-        <!-- HISTORY (LEDGER) -->
+        <!-- LEDGER -->
         <section id="historySection" class="hidden">
-            <h2>Financial Transaction History</h2>
+            <h2>Credit Transactions</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Protocol</th>
                         <th>Entity</th>
                         <th>Credit</th>
-                        <th>Status / Execution</th>
+                        <th>Execution Status</th>
                     </tr>
                 </thead>
                 <tbody id="historyBody"></tbody>
@@ -142,7 +235,7 @@
             loadHistory();
         }
 
-        // --- INVENTORY (MY POSTS ONLY) ---
+        // --- INVENTORY LOGIC (STRICT PRIVACY) ---
         document.getElementById('saveBtn').onclick = async () => {
             const title = document.getElementById('skillTitle').value;
             const desc = document.getElementById('skillDesc').value;
@@ -150,38 +243,38 @@
             await addDoc(collection(db, "skills"), { title, desc, uid: user.uid, email: user.email, timestamp: serverTimestamp() });
             document.getElementById('skillTitle').value = '';
             document.getElementById('skillDesc').value = '';
+            alert("Protocol Deployed.");
         };
 
         function loadMySkills() {
-            // STRICT FILTER: Only show posts where UID matches current user
             const q = query(collection(db, "skills"), where("uid", "==", user.uid));
             onSnapshot(q, s => {
                 const feed = document.getElementById('mySkillsFeed');
-                feed.innerHTML = s.empty ? '<p style="color:#222">Empty.</p>' : '';
+                feed.innerHTML = s.empty ? '<p style="color:#333">No active inventory.</p>' : '';
                 s.forEach(d => {
-                    feed.innerHTML += `<div class="card" style="border-left: 2px solid var(--accent)">
+                    feed.innerHTML += `<div class="card" style="border-left: 3px solid var(--secondary)">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div><b style="color:var(--accent)">${d.data().title}</b></div>
-                            <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">Decommission</button>
+                            <b style="color:var(--accent)">${d.data().title}</b>
+                            <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">Remove</button>
                         </div>
                     </div>`;
                 });
             });
         }
-        window.deleteSkill = async (id) => { if(confirm("Confirm Delete?")) await deleteDoc(doc(db, "skills", id)); };
+        window.deleteSkill = async (id) => { if(confirm("Purge Protocol?")) await deleteDoc(doc(db, "skills", id)); };
 
-        // --- GLOBAL MARKET ---
+        // --- MARKET LOGIC (HIDE OWN) ---
         function loadGlobalFeed() {
             onSnapshot(collection(db, "skills"), s => {
                 const feed = document.getElementById('globalFeed');
                 feed.innerHTML = '';
                 s.forEach(d => {
                     const data = d.data();
-                    if(data.uid === user.uid) return; // Hide your own from global
+                    if(data.uid === user.uid) return; 
                     feed.innerHTML += `<div class="card">
                         <h3 style="color:var(--accent); margin:0 0 10px 0;">${data.title}</h3>
-                        <p style="color:#777; font-size:13px; line-height:1.5;">${data.desc}</p>
-                        <button class="btn btn-outline" onclick="initiateAcquisition('${d.id}', '${data.uid}', '${data.title}')">Acquire Request (1 CR)</button>
+                        <p style="color:var(--text-dim); font-size:13px;">${data.desc}</p>
+                        <button class="btn btn-outline" style="width:100%; margin-top:15px;" onclick="initiateAcquisition('${d.id}', '${data.uid}', '${data.title}')">Acquire (1 CR)</button>
                     </div>`;
                 });
             });
@@ -189,17 +282,16 @@
 
         window.initiateAcquisition = async (skillId, teacherId, title) => {
             const uSnap = await getDoc(doc(db, "users", user.uid));
-            if(uSnap.data().credits < 1) return alert("Insufficient balance.");
+            if(uSnap.data().credits < 1) return alert("Credit Deficit.");
 
-            // 1. Deduct credit immediately (Escrow Lock)
+            // ESCROW LOCK: Deduct 1 credit before class
             await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
 
-            // 2. Create Transaction
             await addDoc(collection(db, "transactions"), {
                 skillId, title, teacherId, learnerId: user.uid, learnerEmail: user.email, 
                 status: 'pending', link: '', time: '', proof: '', created: serverTimestamp()
             });
-            alert("Credit locked in Escrow. Request sent.");
+            alert("1 Credit Locked in Escrow. Waiting for Teacher.");
         };
 
         // --- ALERTS (NOTIFICATIONS) ---
@@ -211,15 +303,15 @@
                 badge.innerText = s.size;
                 s.size > 0 ? badge.classList.remove('hidden') : badge.classList.add('hidden');
                 
-                list.innerHTML = s.empty ? '<p style="color:#222">Systems Nominal. No alerts.</p>' : '';
+                list.innerHTML = s.empty ? '<p style="color:#222">No incoming pings.</p>' : '';
                 s.forEach(d => {
                     const t = d.data();
-                    list.innerHTML += `<div class="card" style="border-left: 2px solid var(--pending)">
-                        <p style="color:var(--pending); font-size:9px; margin:0;">PENDING SESSION</p>
-                        <h4 style="margin:10px 0;">${t.learnerEmail} >> ${t.title}</h4>
-                        <input type="text" id="link-${d.id}" placeholder="Link (GMeet/Zoom)">
-                        <input type="text" id="time-${d.id}" placeholder="Schedule (e.g. 14:00 GMT)">
-                        <button class="btn btn-primary" onclick="acceptSession('${d.id}')">Confirm & Send Link</button>
+                    list.innerHTML += `<div class="card" style="border-left: 3px solid var(--pending)">
+                        <p style="color:var(--pending); font-size:9px; font-weight:bold;">PENDING CONNECTION</p>
+                        <h4 style="margin:10px 0;">${t.learnerEmail} requested access to: ${t.title}</h4>
+                        <input type="text" id="link-${d.id}" placeholder="Provide Meeting Link">
+                        <input type="text" id="time-${d.id}" placeholder="Specify Time">
+                        <button class="btn btn-primary" style="width:100%;" onclick="acceptSession('${d.id}')">Authorize & Send Link</button>
                     </div>`;
                 });
             });
@@ -228,7 +320,7 @@
         window.acceptSession = async (id) => {
             const link = document.getElementById(`link-${id}`).value;
             const time = document.getElementById(`time-${id}`).value;
-            if(!link) return alert("Link required.");
+            if(!link) return alert("Link is required.");
             await updateDoc(doc(db, "transactions", id), { link, time, status: 'approved' });
         };
 
@@ -242,25 +334,23 @@
                     if(t.learnerId !== user.uid && t.teacherId !== user.uid) return;
                     
                     let flow = t.teacherId === user.uid ? `<span style="color:var(--success)">+1.00</span>` : `<span style="color:var(--danger)">-1.00</span>`;
-                    let statusColor = t.status === 'completed' ? 'var(--success)' : (t.status === 'approved' ? 'var(--accent)' : 'var(--pending)');
-                    
                     let action = "";
+                    
                     if(t.status === 'approved' && t.learnerId === user.uid) {
-                        action = `
-                            <div style="margin-top:10px;">
-                                <input type="text" id="proof-${d.id}" placeholder="Screenshot URL (Imgur/Drive Link)" style="font-size:10px; padding:5px;">
-                                <button class="btn btn-primary" style="width:100%;" onclick="completePayment('${d.id}', '${t.teacherId}')">Verify & Release Credit</button>
+                        action = `<div style="margin-top:10px;">
+                                <input type="text" id="proof-${d.id}" placeholder="Proof (Screenshot Link)" style="padding:6px; font-size:10px;">
+                                <button class="btn btn-primary" style="width:100%; margin-top:5px;" onclick="completePayment('${d.id}', '${t.teacherId}')">Finalize & Release</button>
                             </div>`;
                     } else if (t.link) {
-                        action = `<div style="font-size:11px; color:#555;">LINK: ${t.link}<br>TIME: ${t.time}</div>`;
+                        action = `<div style="font-size:11px; color:var(--text-dim); margin-top:5px;">Link: ${t.link}<br>Time: ${t.time}</div>`;
                     }
 
                     body.innerHTML += `<tr>
-                        <td><b style="color:#fff">${t.title}</b></td>
-                        <td>${t.teacherId === user.uid ? t.learnerEmail : 'Teacher'}</td>
+                        <td><b>${t.title}</b></td>
+                        <td>${t.teacherId === user.uid ? t.learnerEmail : 'Remote Teacher'}</td>
                         <td>${flow}</td>
-                        <td>
-                            <span class="status-tag" style="color:${statusColor}">${t.status.toUpperCase()}</span>
+                        <td style="text-align:right;">
+                            <span style="font-size:10px; font-weight:bold; color:${t.status === 'completed' ? 'var(--success)' : 'var(--pending)'}">${t.status.toUpperCase()}</span>
                             ${action}
                         </td>
                     </tr>`;
@@ -270,12 +360,12 @@
 
         window.completePayment = async (transId, teacherId) => {
             const proof = document.getElementById(`proof-${transId}`).value;
-            if(!proof) return alert("Please provide screenshot link as proof of class.");
+            if(!proof) return alert("Evidence URL required.");
             
-            // Only one time accept: Moves credit from learner's "locked" state to teacher's balance
+            // Move credit from "escrow/locked" to teacher's balance
             await updateDoc(doc(db, "users", teacherId), { credits: increment(1) });
             await updateDoc(doc(db, "transactions", transId), { status: 'completed', proof: proof });
-            alert("Transaction finalized. Credit released to teacher.");
+            alert("Payment Released. Session Complete.");
         };
     </script>
 </body>
