@@ -3,31 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Professional Emerald</title>
+    <title>SkillFlux | Professional Skill Exchange</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
-            --bg: #121417; /* Deep Charcoal */
-            --sidebar-bg: #1a1d21; 
-            --card-bg: #1e2227; 
-            --accent: #10b981; /* Emerald Green */
-            --accent-hover: #059669;
-            --border: #2d343c; 
+            --bg: #0f1113; 
+            --sidebar-bg: #16191c; 
+            --card-bg: #1c2024; 
+            --accent: #10b981; /* Emerald */
+            --border: #2a2f35; 
             --text-main: #f1f5f9; 
             --text-dim: #94a3b8; 
-            --danger: #f43f5e; 
-            --success: #10b981;
+            --danger: #ef4444; 
         }
 
         body { margin: 0; background: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* Navigation */
+        /* Navigation Bar */
         nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 0 30px; height: 70px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border); 
+            padding: 0 40px; height: 75px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border); 
             position: sticky; top: 0; z-index: 100;
         }
-        .nav-links { display: flex; gap: 30px; height: 100%; align-items: center; }
+        .nav-links { display: flex; gap: 35px; height: 100%; align-items: center; }
         .nav-item { 
             color: var(--text-dim); text-decoration: none; cursor: pointer; 
             font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
@@ -35,109 +33,111 @@
             transition: 0.3s;
         }
         .nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
-        .nav-brand { font-weight: 800; font-size: 20px; color: #fff; text-decoration: none; margin-right: 40px; }
+        .nav-brand { font-weight: 800; font-size: 22px; color: #fff; text-decoration: none; margin-right: 50px; letter-spacing: -1px; }
 
         /* Right Sidebar */
         .sidebar { 
-            position: fixed; top: 0; right: -320px; width: 320px; height: 100%; 
+            position: fixed; top: 0; right: -340px; width: 340px; height: 100%; 
             background: var(--sidebar-bg); border-left: 1px solid var(--border); 
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200; padding: 40px 25px; 
-            box-sizing: border-box;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200; padding: 40px 30px; 
+            box-sizing: border-box; display: flex; flex-direction: column;
         }
-        .sidebar.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
-        .sidebar-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.7); display: none; z-index: 150; 
-        }
+        .sidebar.active { right: 0; box-shadow: -15px 0 40px rgba(0,0,0,0.6); }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 150; }
 
-        /* Content Area */
+        /* Layout */
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         .hidden { display: none; }
-        .card { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 12px; margin-bottom: 25px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 12px; margin-bottom: 25px; position: relative; }
         
-        h2 { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        .section-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; }
+        .section-label::after { content: ""; height: 1px; flex-grow: 1; background: var(--border); }
 
-        /* Forms & Buttons */
-        .btn { padding: 12px 20px; border: none; cursor: pointer; font-weight: 700; border-radius: 8px; font-size: 11px; text-transform: uppercase; transition: 0.2s; }
-        .btn-primary { background: var(--accent); color: #fff; }
-        .btn-primary:hover { background: var(--accent-hover); }
+        /* Buttons & Inputs */
+        .btn { padding: 12px 22px; border: none; cursor: pointer; font-weight: 700; border-radius: 8px; font-size: 11px; text-transform: uppercase; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: #000; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-danger { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+        .btn-danger:hover { background: var(--danger); color: #fff; }
 
         input, textarea { 
-            width: 100%; background: #121417; border: 1px solid var(--border); color: #fff; 
-            padding: 14px; margin-bottom: 15px; border-radius: 8px; box-sizing: border-box; 
+            width: 100%; background: #0f1113; border: 1px solid var(--border); color: #fff; 
+            padding: 14px; margin-bottom: 15px; border-radius: 8px; box-sizing: border-box; font-family: inherit;
         }
         input:focus { border-color: var(--accent); outline: none; }
 
-        .profile-box { padding: 15px; background: #121417; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .profile-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
+        /* Profile details in sidebar */
+        .profile-info { background: #0f1113; padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 25px; }
+        .info-row { margin-bottom: 15px; }
+        .info-row:last-child { margin-bottom: 0; }
+        .info-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; display: block; }
     </style>
 </head>
 <body>
 
     <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
     
-    <!-- Right Sidebar (Account & Logout) -->
+    <!-- Right Sidebar: Account & Credentials -->
     <div class="sidebar" id="sidebar">
-        <h2>Account Settings</h2>
-        <div class="profile-box">
-            <div class="profile-label">Authorized Node</div>
-            <div id="profEmail" style="font-weight: 600; font-size: 14px;">...</div>
-        </div>
+        <div class="section-label">Account Security</div>
         
-        <h2 style="margin-top: 40px;">Security Protocol</h2>
-        <input type="password" id="newPass" placeholder="Update Password">
-        <button class="btn btn-outline" style="width: 100%;" onclick="changePassword()">Refresh Credentials</button>
+        <div class="profile-info">
+            <div class="info-row">
+                <span class="info-label">Active Email</span>
+                <b id="profEmail">...</b>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Member ID</span>
+                <small id="profUid" style="font-family: monospace; color: var(--text-dim);">...</small>
+            </div>
+        </div>
 
-        <button class="btn btn-danger" style="width: 100%; margin-top: auto; position: absolute; bottom: 40px; left: 0; width: calc(100% - 50px); margin-left: 25px;" onclick="handleLogout()">
-            <i class="fas fa-power-off"></i> Terminate Session
+        <div class="section-label">Credentials</div>
+        <input type="password" id="newPass" placeholder="Enter New Password">
+        <button class="btn btn-outline" style="width: 100%;" onclick="changePassword()">Update Password</button>
+
+        <button class="btn btn-danger" style="margin-top: auto; width: 100%;" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Terminate Session
         </button>
     </div>
 
-    <!-- Navigation Bar -->
+    <!-- Top Navigation -->
     <nav>
         <div class="nav-links">
             <a href="#" class="nav-brand">SKILLFLUX</a>
-            <div class="nav-item active" id="tab-feed" onclick="switchTab('feed')">Market Place</div>
-            <div class="nav-item" id="tab-my-posts" onclick="switchTab('my-posts')">My Inventory</div>
-            <div class="nav-item" id="tab-requests" onclick="switchTab('requests')">Active Alerts</div>
-            <div class="nav-item" id="tab-history" onclick="switchTab('history')">History Log</div>
+            <div class="nav-item active" id="tab-market" onclick="switchTab('market')">Market Place</div>
+            <div class="nav-item" id="tab-inventory" onclick="switchTab('inventory')">My Inventory</div>
+            <div class="nav-item" id="tab-alerts" onclick="switchTab('alerts')">Alerts</div>
         </div>
         <div style="display: flex; align-items: center; gap: 20px;">
             <div style="color: var(--accent); font-weight: 800; font-size: 14px;"><span id="creditBalance">0</span> CR</div>
-            <div style="cursor: pointer; font-size: 20px;" onclick="toggleSidebar()"><i class="fas fa-user-circle"></i></div>
+            <div style="cursor: pointer; font-size: 24px; color: var(--text-dim);" onclick="toggleSidebar()"><i class="fas fa-user-circle"></i></div>
         </div>
     </nav>
 
     <div class="container">
-        <!-- GLOBAL MARKET (OTHERS' POSTS) -->
-        <section id="feedSection">
-            <h2>Global Skills Market</h2>
-            <div id="globalFeed"></div>
+        <!-- MARKET PLACE: See other people's posts -->
+        <section id="marketSection">
+            <div class="section-label">Available Skills (Global)</div>
+            <div id="marketFeed"></div>
         </section>
 
-        <!-- MY INVENTORY (YOUR POSTS ONLY) -->
-        <section id="my-postsSection" class="hidden">
-            <h2>Post New expertise</h2>
+        <!-- MY INVENTORY: See and Manage your own posts -->
+        <section id="inventorySection" class="hidden">
+            <div class="section-label">Deploy New Skill</div>
             <div class="card">
-                <input type="text" id="skillTitle" placeholder="Skill Title (e.g., UI Design)">
-                <textarea id="skillDesc" rows="3" placeholder="Explain what you can teach..."></textarea>
-                <button class="btn btn-primary" id="saveBtn">Deploy to Inventory</button>
+                <input type="text" id="skillTitle" placeholder="Skill Name">
+                <textarea id="skillDesc" rows="3" placeholder="Describe your expertise..."></textarea>
+                <button class="btn btn-primary" id="saveBtn">Add to My Inventory</button>
             </div>
-            <h2>Your Active Listings</h2>
+            <div class="section-label">My Posted Skills</div>
             <div id="mySkillsFeed"></div>
         </section>
 
-        <!-- ALERTS & HISTORY -->
-        <section id="requestsSection" class="hidden">
-            <h2>Notifications & Requests</h2>
+        <!-- ALERTS -->
+        <section id="alertsSection" class="hidden">
+            <div class="section-label">Incoming Requests</div>
             <div id="incomingList"></div>
-        </section>
-
-        <section id="historySection" class="hidden">
-            <h2>Transaction Ledger</h2>
-            <div id="historyBody"></div>
         </section>
     </div>
 
@@ -160,129 +160,128 @@
         const db = getFirestore(app);
         let user = null;
 
-        // UI Logic
+        // UI Handlers
         window.toggleSidebar = () => {
-            const side = document.getElementById('sidebar');
-            const over = document.getElementById('overlay');
-            side.classList.toggle('active');
-            over.style.display = side.classList.contains('active') ? 'block' : 'none';
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').style.display = document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
         };
 
         window.switchTab = (tab) => {
-            ['feed', 'my-posts', 'requests', 'history'].forEach(id => {
-                document.getElementById(id+'Section').classList.add('hidden');
-                document.getElementById('tab-'+id).classList.remove('active');
+            ['market', 'inventory', 'alerts'].forEach(t => {
+                document.getElementById(t+'Section').classList.add('hidden');
+                document.getElementById('tab-'+t).classList.remove('active');
             });
             document.getElementById(tab+'Section').classList.remove('hidden');
             document.getElementById('tab-'+tab).classList.add('active');
         };
 
         onAuthStateChanged(auth, u => {
-            if(u) { user = u; init(); document.getElementById('profEmail').innerText = u.email; }
-            else { window.location.href="index.html"; }
+            if(u) { 
+                user = u; 
+                document.getElementById('profEmail').innerText = u.email;
+                document.getElementById('profUid').innerText = u.uid;
+                init(); 
+            } else { window.location.href="index.html"; }
         });
 
         function init() {
             onSnapshot(doc(db, "users", user.uid), s => { if(s.exists()) document.getElementById('creditBalance').innerText = s.data().credits; });
             loadMarket();
-            loadInventory();
-            loadHistory();
-            loadAlerts();
+            loadMyInventory();
+            loadIncomingRequests();
         }
 
-        // --- ACCOUNT ---
+        // --- PASSWORD & LOGOUT ---
         window.changePassword = async () => {
             const p = document.getElementById('newPass').value;
-            if(p.length < 6) return alert("Security too low.");
-            await updatePassword(user, p).then(() => alert("Password Updated.")).catch(() => alert("Login again to perform this."));
+            if(p.length < 6) return alert("Password must be 6+ chars.");
+            try {
+                await updatePassword(user, p);
+                alert("Password updated.");
+            } catch(e) { alert("Please log in again to change password."); }
         };
         window.handleLogout = () => signOut(auth);
 
-        // --- SKILLS LOGIC (STRICT PRIVACY) ---
+        // --- SKILL MANAGEMENT ---
         document.getElementById('saveBtn').onclick = async () => {
             const title = document.getElementById('skillTitle').value;
             const desc = document.getElementById('skillDesc').value;
             if(!title) return;
-            await addDoc(collection(db, "skills"), { title, desc, uid: user.uid, email: user.email, timestamp: serverTimestamp() });
-            document.getElementById('skillTitle').value = ''; document.getElementById('skillDesc').value = '';
-            alert("Protocol Deployed to Inventory.");
+            await addDoc(collection(db, "skills"), { 
+                title, desc, uid: user.uid, email: user.email, timestamp: serverTimestamp() 
+            });
+            document.getElementById('skillTitle').value = '';
+            document.getElementById('skillDesc').value = '';
+            alert("Skill added to your inventory!");
         };
 
-        function loadInventory() {
-            // YOU ONLY: Query where UID matches current user
+        // INVENTORY: Shows ONLY YOUR posts with a DELETE button
+        function loadMyInventory() {
             const q = query(collection(db, "skills"), where("uid", "==", user.uid));
             onSnapshot(q, s => {
                 const div = document.getElementById('mySkillsFeed');
-                div.innerHTML = s.empty ? '<p style="color:#444">Inventory Empty.</p>' : '';
+                div.innerHTML = s.empty ? '<p style="color:var(--text-dim)">No skills in your inventory yet.</p>' : '';
                 s.forEach(d => {
-                    div.innerHTML += `<div class="card">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <b style="color:var(--accent)">${d.data().title}</b>
-                            <button class="btn btn-danger" style="padding:5px 10px; font-size:9px;" onclick="deleteSkill('${d.id}')">Remove</button>
-                        </div>
-                    </div>`;
+                    div.innerHTML += `
+                        <div class="card">
+                            <h3 style="margin:0; color:var(--accent)">${d.data().title}</h3>
+                            <p style="color:var(--text-dim); font-size:13px; margin:10px 0;">${d.data().desc}</p>
+                            <button class="btn btn-danger" onclick="deleteSkill('${d.id}')">Delete Skill</button>
+                        </div>`;
                 });
             });
         }
-        window.deleteSkill = (id) => deleteDoc(doc(db, "skills", id));
+        window.deleteSkill = (id) => { if(confirm("Permanently delete this skill?")) deleteDoc(doc(db, "skills", id)); };
 
+        // MARKET: Shows ALL OTHER skills (Exclude yours), NO delete button
         function loadMarket() {
-            // OTHERS ONLY: Load all, hide current user's UID
             onSnapshot(collection(db, "skills"), s => {
-                const div = document.getElementById('globalFeed');
+                const div = document.getElementById('marketFeed');
                 div.innerHTML = '';
+                let count = 0;
                 s.forEach(d => {
                     const data = d.data();
-                    if(data.uid === user.uid) return; 
-                    div.innerHTML += `<div class="card">
-                        <h3 style="margin:0; color:var(--accent);">${data.title}</h3>
-                        <p style="color:var(--text-dim); font-size:13px; margin:15px 0;">${data.desc}</p>
-                        <button class="btn btn-primary" onclick="buy('${d.id}','${data.uid}','${data.title}')">Acquire (1 CR)</button>
-                    </div>`;
+                    if(data.uid === user.uid) return; // THIS IS THE KEY: Hidden if it's yours
+                    count++;
+                    div.innerHTML += `
+                        <div class="card">
+                            <h3 style="margin:0; color:var(--accent)">${data.title}</h3>
+                            <p style="color:var(--text-dim); font-size:13px; margin:15px 0;">${data.desc}</p>
+                            <button class="btn btn-primary" onclick="buySkill('${d.id}','${data.uid}','${data.title}')">Request Skill (1 CR)</button>
+                        </div>`;
                 });
+                if(count === 0) div.innerHTML = '<p style="color:var(--text-dim)">Market is empty right now.</p>';
             });
         }
 
-        window.buy = async (sid, tid, title) => {
+        window.buySkill = async (sid, tid, title) => {
             const u = await getDoc(doc(db, "users", user.uid));
-            if(u.data().credits < 1) return alert("Low credits.");
+            if(u.data().credits < 1) return alert("Not enough credits.");
             await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
-            await addDoc(collection(db, "transactions"), { skillId: sid, title, teacherId: tid, learnerId: user.uid, status: 'pending', created: serverTimestamp() });
-            alert("Request sent. Credit locked in escrow.");
+            await addDoc(collection(db, "transactions"), { skillId: sid, title, teacherId: tid, learnerId: user.uid, status: 'pending' });
+            alert("Request sent successfully.");
         };
 
-        function loadAlerts() {
+        function loadIncomingRequests() {
             const q = query(collection(db, "transactions"), where("teacherId", "==", user.uid), where("status", "==", "pending"));
             onSnapshot(q, s => {
-                const list = document.getElementById('incomingList');
-                list.innerHTML = s.empty ? '<p style="color:#444">No alerts.</p>' : '';
+                const div = document.getElementById('incomingList');
+                div.innerHTML = s.empty ? '<p style="color:var(--text-dim)">No active requests.</p>' : '';
                 s.forEach(d => {
-                    const t = d.data();
-                    list.innerHTML += `<div class="card" style="border-left: 3px solid orange">
-                        <p style="font-size:10px; color:orange">INCOMING REQUEST</p>
-                        <b>${t.title}</b>
-                        <input type="text" id="link-${d.id}" placeholder="Meeting Link" style="margin-top:10px;">
-                        <button class="btn btn-primary" style="width:100%" onclick="accept('${d.id}')">Send Access</button>
-                    </div>`;
+                    div.innerHTML += `
+                        <div class="card" style="border-left: 4px solid var(--accent)">
+                            <b>${d.data().title}</b> request received.
+                            <input type="text" id="link-${d.id}" placeholder="Meeting Link" style="margin-top:10px;">
+                            <button class="btn btn-primary" style="width:100%" onclick="approve('${d.id}')">Approve & Send Link</button>
+                        </div>`;
                 });
             });
         }
-        window.accept = async (id) => {
-            const l = document.getElementById(`link-${id}`).value;
-            if(!l) return;
-            await updateDoc(doc(db, "transactions", id), { link: l, status: 'approved' });
+        window.approve = async (id) => {
+            const link = document.getElementById(`link-${id}`).value;
+            if(!link) return;
+            await updateDoc(doc(db, "transactions", id), { link, status: 'approved' });
         };
-
-        function loadHistory() {
-            onSnapshot(collection(db, "transactions"), s => {
-                const body = document.getElementById('historyBody'); body.innerHTML = '';
-                s.forEach(d => {
-                    const t = d.data();
-                    if(t.learnerId !== user.uid && t.teacherId !== user.uid) return;
-                    body.innerHTML += `<div class="card" style="font-size:13px;"><b>${t.title}</b> | Status: <span style="color:var(--accent)">${t.status.toUpperCase()}</span></div>`;
-                });
-            });
-        }
     </script>
 </body>
 </html>
