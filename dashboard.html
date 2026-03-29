@@ -3,134 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillFlux | Professional Grid</title>
+    <title>SkillFlux | Professional Emerald</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
-            --bg: #050505; --sidebar-bg: #0a0a0b; --card-bg: #111114; 
-            --accent: #00d4ff; --secondary: #6366f1; --border: #1f1f23; 
-            --text-main: #f8fafc; --text-dim: #94a3b8; --danger: #ef4444; 
-            --success: #10b981; --pending: #f59e0b;
+            --bg: #121417; /* Deep Charcoal */
+            --sidebar-bg: #1a1d21; 
+            --card-bg: #1e2227; 
+            --accent: #10b981; /* Emerald Green */
+            --accent-hover: #059669;
+            --border: #2d343c; 
+            --text-main: #f1f5f9; 
+            --text-dim: #94a3b8; 
+            --danger: #f43f5e; 
+            --success: #10b981;
         }
 
-        body { margin: 0; background: var(--bg); color: var(--text-main); font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
+        body { margin: 0; background: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* Navigation & Sidebar */
+        /* Navigation */
         nav { 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 25px; background: rgba(5, 5, 5, 0.8); border-bottom: 1px solid var(--border); 
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px);
+            padding: 0 30px; height: 70px; background: var(--sidebar-bg); border-bottom: 1px solid var(--border); 
+            position: sticky; top: 0; z-index: 100;
         }
-        .menu-trigger { font-size: 20px; color: var(--accent); cursor: pointer; transition: 0.3s; }
-        .nav-brand { font-weight: 800; letter-spacing: 2px; font-size: 20px; color: var(--text-main); text-decoration: none; }
-        
+        .nav-links { display: flex; gap: 30px; height: 100%; align-items: center; }
+        .nav-item { 
+            color: var(--text-dim); text-decoration: none; cursor: pointer; 
+            font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            height: 100%; display: flex; align-items: center; border-bottom: 3px solid transparent;
+            transition: 0.3s;
+        }
+        .nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .nav-brand { font-weight: 800; font-size: 20px; color: #fff; text-decoration: none; margin-right: 40px; }
+
+        /* Right Sidebar */
         .sidebar { 
-            position: fixed; top: 0; left: -280px; width: 280px; height: 100%; 
-            background: var(--sidebar-bg); border-right: 1px solid var(--border); 
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200; padding: 40px 20px; 
-            display: flex; flex-direction: column;
+            position: fixed; top: 0; right: -320px; width: 320px; height: 100%; 
+            background: var(--sidebar-bg); border-left: 1px solid var(--border); 
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 200; padding: 40px 25px; 
+            box-sizing: border-box;
         }
-        .sidebar.active { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
+        .sidebar.active { right: 0; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
         .sidebar-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.6); display: none; z-index: 150; 
+            background: rgba(0,0,0,0.7); display: none; z-index: 150; 
         }
 
-        .sidebar h3 { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
-        .side-link { 
-            padding: 12px 15px; color: var(--text-main); text-decoration: none; 
-            font-size: 14px; display: flex; align-items: center; gap: 12px; 
-            border-radius: 8px; margin-bottom: 5px; transition: 0.2s; cursor: pointer;
-        }
-        .side-link:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
-        .side-link.logout { margin-top: auto; color: var(--danger); }
-
-        /* Dashboard UI */
-        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        /* Content Area */
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         .hidden { display: none; }
-        .card { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); padding: 25px; border-radius: 12px; margin-bottom: 25px; }
         
-        .section-header { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .section-header::after { content: ""; height: 1px; flex-grow: 1; background: var(--border); }
+        h2 { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
 
-        .btn { padding: 10px 16px; border: none; cursor: pointer; font-weight: 700; border-radius: 6px; font-size: 11px; transition: 0.2s; }
-        .btn-primary { background: var(--accent); color: #000; }
+        /* Forms & Buttons */
+        .btn { padding: 12px 20px; border: none; cursor: pointer; font-weight: 700; border-radius: 8px; font-size: 11px; text-transform: uppercase; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-danger { background: rgba(244, 63, 94, 0.1); color: var(--danger); border: 1px solid var(--danger); }
 
         input, textarea { 
-            width: 100%; background: #000; border: 1px solid var(--border); color: #fff; 
-            padding: 12px; margin-bottom: 12px; border-radius: 8px; box-sizing: border-box; 
+            width: 100%; background: #121417; border: 1px solid var(--border); color: #fff; 
+            padding: 14px; margin-bottom: 15px; border-radius: 8px; box-sizing: border-box; 
         }
         input:focus { border-color: var(--accent); outline: none; }
 
-        .user-pill { background: #1a1a1e; padding: 6px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); color: var(--accent); }
+        .profile-box { padding: 15px; background: #121417; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .profile-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
     
+    <!-- Right Sidebar (Account & Logout) -->
     <div class="sidebar" id="sidebar">
-        <h3>Command Menu</h3>
-        <div class="side-link" onclick="switchTab('feed')"><i class="fas fa-globe"></i> Market Place</div>
-        <div class="side-link" onclick="switchTab('my-posts')"><i class="fas fa-box"></i> My Inventory</div>
-        <div class="side-link" onclick="switchTab('requests')"><i class="fas fa-bell"></i> Alerts</div>
-        <div class="side-link" onclick="switchTab('history')"><i class="fas fa-list"></i> History</div>
+        <h2>Account Settings</h2>
+        <div class="profile-box">
+            <div class="profile-label">Authorized Node</div>
+            <div id="profEmail" style="font-weight: 600; font-size: 14px;">...</div>
+        </div>
         
-        <h3 style="margin-top: 30px;">Security</h3>
-        <div class="side-link" onclick="switchTab('profile')"><i class="fas fa-user-shield"></i> Account Details</div>
-        <div class="side-link logout" onclick="handleLogout()"><i class="fas fa-power-off"></i> Terminate Session</div>
+        <h2 style="margin-top: 40px;">Security Protocol</h2>
+        <input type="password" id="newPass" placeholder="Update Password">
+        <button class="btn btn-outline" style="width: 100%;" onclick="changePassword()">Refresh Credentials</button>
+
+        <button class="btn btn-danger" style="width: 100%; margin-top: auto; position: absolute; bottom: 40px; left: 0; width: calc(100% - 50px); margin-left: 25px;" onclick="handleLogout()">
+            <i class="fas fa-power-off"></i> Terminate Session
+        </button>
     </div>
 
+    <!-- Navigation Bar -->
     <nav>
-        <div class="menu-trigger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
-        <a href="#" class="nav-brand">SKILLFLUX</a>
-        <div class="user-pill"><span id="creditBalance">0</span> CR</div>
+        <div class="nav-links">
+            <a href="#" class="nav-brand">SKILLFLUX</a>
+            <div class="nav-item active" id="tab-feed" onclick="switchTab('feed')">Market Place</div>
+            <div class="nav-item" id="tab-my-posts" onclick="switchTab('my-posts')">My Inventory</div>
+            <div class="nav-item" id="tab-requests" onclick="switchTab('requests')">Active Alerts</div>
+            <div class="nav-item" id="tab-history" onclick="switchTab('history')">History Log</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="color: var(--accent); font-weight: 800; font-size: 14px;"><span id="creditBalance">0</span> CR</div>
+            <div style="cursor: pointer; font-size: 20px;" onclick="toggleSidebar()"><i class="fas fa-user-circle"></i></div>
+        </div>
     </nav>
 
     <div class="container">
-        <!-- MARKET PLACE (OTHERS ONLY) -->
+        <!-- GLOBAL MARKET (OTHERS' POSTS) -->
         <section id="feedSection">
-            <div class="section-header">Market Place</div>
+            <h2>Global Skills Market</h2>
             <div id="globalFeed"></div>
         </section>
 
-        <!-- INVENTORY (YOUR POSTS ONLY) -->
+        <!-- MY INVENTORY (YOUR POSTS ONLY) -->
         <section id="my-postsSection" class="hidden">
-            <div class="section-header">Inventory Deployment</div>
+            <h2>Post New expertise</h2>
             <div class="card">
-                <input type="text" id="skillTitle" placeholder="Skill Title">
-                <textarea id="skillDesc" placeholder="Describe your expertise..."></textarea>
-                <button class="btn btn-primary" id="saveBtn">Publish to Inventory</button>
+                <input type="text" id="skillTitle" placeholder="Skill Title (e.g., UI Design)">
+                <textarea id="skillDesc" rows="3" placeholder="Explain what you can teach..."></textarea>
+                <button class="btn btn-primary" id="saveBtn">Deploy to Inventory</button>
             </div>
-            <div class="section-header">Active Inventory</div>
+            <h2>Your Active Listings</h2>
             <div id="mySkillsFeed"></div>
         </section>
 
-        <!-- ALERTS -->
+        <!-- ALERTS & HISTORY -->
         <section id="requestsSection" class="hidden">
-            <div class="section-header">Session Alerts</div>
+            <h2>Notifications & Requests</h2>
             <div id="incomingList"></div>
         </section>
 
-        <!-- HISTORY -->
         <section id="historySection" class="hidden">
-            <div class="section-header">Transaction Log</div>
+            <h2>Transaction Ledger</h2>
             <div id="historyBody"></div>
-        </section>
-
-        <!-- PROFILE -->
-        <section id="profileSection" class="hidden">
-            <div class="section-header">Account Protocol</div>
-            <div class="card">
-                <p style="font-size: 12px; color: var(--text-dim);">AUTHORIZED EMAIL</p>
-                <p id="profEmail" style="font-weight: bold; margin-bottom: 20px;">...</p>
-                
-                <p style="font-size: 12px; color: var(--text-dim);">CREDENTIAL MANAGEMENT</p>
-                <input type="password" id="newPass" placeholder="New Password">
-                <button class="btn btn-outline" onclick="changePassword()">Update Password</button>
-            </div>
         </section>
     </div>
 
@@ -153,19 +160,21 @@
         const db = getFirestore(app);
         let user = null;
 
-        // UI Helpers
+        // UI Logic
         window.toggleSidebar = () => {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').style.display = 
-                document.getElementById('sidebar').classList.contains('active') ? 'block' : 'none';
+            const side = document.getElementById('sidebar');
+            const over = document.getElementById('overlay');
+            side.classList.toggle('active');
+            over.style.display = side.classList.contains('active') ? 'block' : 'none';
         };
 
         window.switchTab = (tab) => {
-            ['feed', 'my-posts', 'requests', 'history', 'profile'].forEach(id => {
+            ['feed', 'my-posts', 'requests', 'history'].forEach(id => {
                 document.getElementById(id+'Section').classList.add('hidden');
+                document.getElementById('tab-'+id).classList.remove('active');
             });
             document.getElementById(tab+'Section').classList.remove('hidden');
-            toggleSidebar();
+            document.getElementById('tab-'+tab).classList.add('active');
         };
 
         onAuthStateChanged(auth, u => {
@@ -178,51 +187,56 @@
             loadMarket();
             loadInventory();
             loadHistory();
+            loadAlerts();
         }
 
-        // --- ACCOUNT LOGIC ---
+        // --- ACCOUNT ---
         window.changePassword = async () => {
             const p = document.getElementById('newPass').value;
-            if(p.length < 6) return alert("Password too short.");
-            await updatePassword(user, p).then(() => alert("Password Updated.")).catch(e => alert("Re-login required."));
+            if(p.length < 6) return alert("Security too low.");
+            await updatePassword(user, p).then(() => alert("Password Updated.")).catch(() => alert("Login again to perform this."));
         };
-
         window.handleLogout = () => signOut(auth);
 
-        // --- POSTING & INVENTORY ISOLATION ---
+        // --- SKILLS LOGIC (STRICT PRIVACY) ---
         document.getElementById('saveBtn').onclick = async () => {
             const title = document.getElementById('skillTitle').value;
             const desc = document.getElementById('skillDesc').value;
             if(!title) return;
             await addDoc(collection(db, "skills"), { title, desc, uid: user.uid, email: user.email, timestamp: serverTimestamp() });
             document.getElementById('skillTitle').value = ''; document.getElementById('skillDesc').value = '';
-            alert("Published to Inventory.");
+            alert("Protocol Deployed to Inventory.");
         };
 
         function loadInventory() {
-            // Only see YOUR OWN posts in Inventory
+            // YOU ONLY: Query where UID matches current user
             const q = query(collection(db, "skills"), where("uid", "==", user.uid));
             onSnapshot(q, s => {
                 const div = document.getElementById('mySkillsFeed');
-                div.innerHTML = s.empty ? '<p style="color:#333">No items.</p>' : '';
+                div.innerHTML = s.empty ? '<p style="color:#444">Inventory Empty.</p>' : '';
                 s.forEach(d => {
-                    div.innerHTML += `<div class="card"><b>${d.data().title}</b><br><button class="btn btn-outline" style="margin-top:10px" onclick="deleteSkill('${d.id}')">Delete</button></div>`;
+                    div.innerHTML += `<div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <b style="color:var(--accent)">${d.data().title}</b>
+                            <button class="btn btn-danger" style="padding:5px 10px; font-size:9px;" onclick="deleteSkill('${d.id}')">Remove</button>
+                        </div>
+                    </div>`;
                 });
             });
         }
         window.deleteSkill = (id) => deleteDoc(doc(db, "skills", id));
 
         function loadMarket() {
-            // Only see OTHERS' posts in Market
+            // OTHERS ONLY: Load all, hide current user's UID
             onSnapshot(collection(db, "skills"), s => {
                 const div = document.getElementById('globalFeed');
                 div.innerHTML = '';
                 s.forEach(d => {
                     const data = d.data();
-                    if(data.uid === user.uid) return; // SKIP YOUR OWN
+                    if(data.uid === user.uid) return; 
                     div.innerHTML += `<div class="card">
-                        <h3 style="color:var(--accent); margin-top:0;">${data.title}</h3>
-                        <p style="color:var(--text-dim); font-size:13px;">${data.desc}</p>
+                        <h3 style="margin:0; color:var(--accent);">${data.title}</h3>
+                        <p style="color:var(--text-dim); font-size:13px; margin:15px 0;">${data.desc}</p>
                         <button class="btn btn-primary" onclick="buy('${d.id}','${data.uid}','${data.title}')">Acquire (1 CR)</button>
                     </div>`;
                 });
@@ -231,19 +245,41 @@
 
         window.buy = async (sid, tid, title) => {
             const u = await getDoc(doc(db, "users", user.uid));
-            if(u.data().credits < 1) return alert("No Credits.");
+            if(u.data().credits < 1) return alert("Low credits.");
             await updateDoc(doc(db, "users", user.uid), { credits: increment(-1) });
-            await addDoc(collection(db, "transactions"), { skillId: sid, title, teacherId: tid, learnerId: user.uid, status: 'pending' });
-            alert("Request sent. Credit Escrowed.");
+            await addDoc(collection(db, "transactions"), { skillId: sid, title, teacherId: tid, learnerId: user.uid, status: 'pending', created: serverTimestamp() });
+            alert("Request sent. Credit locked in escrow.");
+        };
+
+        function loadAlerts() {
+            const q = query(collection(db, "transactions"), where("teacherId", "==", user.uid), where("status", "==", "pending"));
+            onSnapshot(q, s => {
+                const list = document.getElementById('incomingList');
+                list.innerHTML = s.empty ? '<p style="color:#444">No alerts.</p>' : '';
+                s.forEach(d => {
+                    const t = d.data();
+                    list.innerHTML += `<div class="card" style="border-left: 3px solid orange">
+                        <p style="font-size:10px; color:orange">INCOMING REQUEST</p>
+                        <b>${t.title}</b>
+                        <input type="text" id="link-${d.id}" placeholder="Meeting Link" style="margin-top:10px;">
+                        <button class="btn btn-primary" style="width:100%" onclick="accept('${d.id}')">Send Access</button>
+                    </div>`;
+                });
+            });
+        }
+        window.accept = async (id) => {
+            const l = document.getElementById(`link-${id}`).value;
+            if(!l) return;
+            await updateDoc(doc(db, "transactions", id), { link: l, status: 'approved' });
         };
 
         function loadHistory() {
             onSnapshot(collection(db, "transactions"), s => {
-                const div = document.getElementById('historyBody'); div.innerHTML = '';
+                const body = document.getElementById('historyBody'); body.innerHTML = '';
                 s.forEach(d => {
                     const t = d.data();
                     if(t.learnerId !== user.uid && t.teacherId !== user.uid) return;
-                    div.innerHTML += `<div class="card"><b>${t.title}</b> | Status: ${t.status}</div>`;
+                    body.innerHTML += `<div class="card" style="font-size:13px;"><b>${t.title}</b> | Status: <span style="color:var(--accent)">${t.status.toUpperCase()}</span></div>`;
                 });
             });
         }
